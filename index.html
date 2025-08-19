@@ -1,646 +1,504 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <!-- Prevent “tiny zoomed-out” rendering on some Android browsers -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>TrendQash — Multi-Country Portal</title>
-  <meta name="description" content="TrendQash local portal — tasks, payouts, testimonials, WhatsApp support." />
-
-  <!-- Tailwind (CDN). Keep it for now; we’ll inline tiny utility CSS for stability too. -->
+  <meta name="description" content="TrendQash Agencies — local tasks, payouts and support (Kenya, Uganda, Ghana, Botswana, Malawi).">
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    /* ===== Base stability & mobile-first fixes ===== */
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body { height: 100%; }
-    html { -webkit-text-size-adjust: 100%; }
-    body {
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background: #0b1220 linear-gradient(180deg, #0b1220 0%, #0f172a 100%);
-      color: #0f172a;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+    /* Light, fast, mobile-first styles */
+    :root{
+      --muted:#64748b;
+      --glass: rgba(255,255,255,0.92);
+      --card-radius:12px;
     }
-    /* “Glass” card token — subtle & light (mobile-friendly shadow) */
-    .glass {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      backdrop-filter: blur(8px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;-webkit-font-smoothing:antialiased}
+    body{background:#f8fafc;color:#0f172a;webkit-font-smoothing:antialiased}
+    .glass{background:var(--glass);border-radius:var(--card-radius);box-shadow:0 6px 18px rgba(2,6,23,0.06);padding:14px}
+    .small{font-size:.95rem;color:var(--muted)}
+    .task-card{border-radius:10px;padding:12px;border:1px solid rgba(15,23,42,0.04);background:linear-gradient(180deg,#fff,#fbfbfd)}
+    .task-row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+    .task-left{display:flex;gap:12px;align-items:center}
+    .task-emoji{font-size:1.6rem;width:44px;text-align:center}
+    .muted{color:var(--muted)}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem .9rem;border-radius:999px;font-weight:600}
+    .btn-primary{background:#0ea5a4;color:white}
+    .btn-ghost{background:transparent;border:1px solid rgba(15,23,42,0.06)}
+    input[type="number"], input[type="text"]{padding:.5rem;border:1px solid rgba(15,23,42,0.06);border-radius:8px;width:100%;box-sizing:border-box}
+    .page{max-width:980px;margin:0 auto;padding:14px}
+    /* focus */
+    :focus{outline:2px solid rgba(14,165,164,0.12);outline-offset:2px}
+    /* keep animations minimal */
+    .subtle-pop{transition:transform .14s ease}
+    .subtle-pop:active{transform:translateY(1px) scale(.997)}
+    /* responsive grid */
+    @media (max-width:640px){
+      .grid-cols-responsive { grid-template-columns: 1fr; }
     }
-    /* Safe container that never shrinks too small or overflows */
-    .page-wrap {
-      max-width: 1100px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 12px 16px 32px;
-    }
-    /* Sticky top bar on mobile so buttons are reachable */
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      backdrop-filter: blur(8px);
-      background: rgba(11,18,32,0.5);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-    /* Buttons */
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      gap: .5rem; padding: .5rem .9rem; border-radius: 9999px;
-      font-weight: 600; white-space: nowrap; user-select: none;
-      transition: transform .15s ease, opacity .15s ease;
-    }
-    .btn:active { transform: translateY(1px) scale(.99); }
-    .btn-primary { background: white; color: #0f172a; }
-    .btn-dark { background: #0f172a; color: white; }
-    .btn-ghost { background: rgba(255,255,255,0.08); color: white; border: 1px solid rgba(255,255,255,0.14); }
-    /* Popup backdrop */
-    .backdrop {
-      position: fixed; inset: 0; display: none;
-      align-items: center; justify-content: center;
-      background: rgba(0,0,0,0.55);
-      z-index: 50;
-    }
-    .backdrop.show { display: flex; }
-    /* Prevent layout shift while loading */
-    .skeleton {
-      background: linear-gradient(90deg, rgba(255,255,255,.05) 25%, rgba(255,255,255,.12) 37%, rgba(255,255,255,.05) 63%);
-      background-size: 400% 100%;
-      animation: shimmer 1.4s ease-in-out infinite;
-    }
-    @keyframes shimmer { 0%{background-position:100% 0} 100%{background-position:0 0} }
-    /* Accent chips */
-    .chip {
-      padding: .25rem .6rem; border-radius: 9999px; font-weight: 600; font-size: .75rem;
-      background: rgba(255,255,255,0.1); color: #e2e8f0; border: 1px solid rgba(255,255,255,0.16);
+    @media (min-width:641px){
+      .grid-cols-responsive { grid-template-columns: repeat(2, minmax(0,1fr)); }
     }
   </style>
 </head>
-
 <body>
-  <!-- ===== Topbar ===== -->
-  <div class="topbar">
-    <div class="page-wrap flex items-center justify-between gap-3 py-2">
-      <div class="flex items-center gap-2">
-        <div class="w-9 h-9 rounded-xl bg-white/10 grid place-items-center text-white text-lg">TQ</div>
-        <div class="text-white">
-          <div class="text-sm font-bold leading-tight">TrendQash Agencies</div>
-          <div class="text-[11px] opacity-80">Local tasks • Local payouts • Real members</div>
-        </div>
+
+  <!-- ===== Floating WhatsApp button (improved) ===== -->
+  <a id="whatsappFloat" class="fixed bottom-6 right-4 bg-green-500 text-white rounded-full p-3 shadow-lg z-50 subtle-pop"
+     href="#" target="_blank" rel="noopener noreferrer" aria-label="Open WhatsApp chat">
+    <!-- simple WhatsApp icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M.057 24l1.687-6.163A11.871 11.871 0 010 11.999C0 5.373 5.373 0 12 0s12 5.373 12 12c0 6.627-5.373 12-12 12a11.95 11.95 0 01-6.057-1.637L.057 24zM8.463 16.4l.553-.164a6.02 6.02 0 003.115-.826 5.997 5.997 0 002.027-2.092 5.899 5.899 0 00.517-1.711 5.96 5.96 0 00-1.02-3.804 6 6 0 00-3.739-2.674A6.02 6.02 0 006.43 5.8c-.49 0-.962.055-1.41.163l-.432.112L3.51 6.186l.186 1.428c.11.841.405 1.63.86 2.33l.146.212-1.01 3.782 3.761-1.268z"/>
+    </svg>
+  </a>
+
+  <!-- ===== Chatbot floating bubble ===== -->
+  <button id="chatToggle" class="fixed bottom-20 right-4 bg-blue-600 text-white p-3 rounded-full shadow-lg z-50 subtle-pop" aria-label="Open chat">
+    💬
+  </button>
+
+  <div id="chatWindow" class="hidden fixed bottom-28 right-4 w-80 bg-white rounded-lg shadow-xl p-3 z-50">
+    <div class="flex items-center justify-between mb-2">
+      <div class="font-semibold">TrendQash Chat</div>
+      <button id="chatClose" class="text-sm text-slate-500">Close</button>
+    </div>
+    <div id="chatMessages" class="h-40 overflow-y-auto text-sm p-2 rounded border bg-slate-50">
+      <div><strong>Bot:</strong> Hi! Need help? Try: "How to join", "Withdraw", "Payout methods".</div>
+    </div>
+    <div class="mt-2 flex gap-2">
+      <input id="chatInput" type="text" placeholder="Type a question..." class="border p-2 rounded flex-1 text-sm" />
+      <button id="chatSend" class="btn btn-primary text-sm">Send</button>
+    </div>
+    <div class="mt-2 small muted">Quick replies: <button data-quick="How to join" class="text-blue-600 underline">How to join</button> · <button data-quick="Withdraw" class="text-blue-600 underline">Withdraw</button></div>
+  </div>
+
+  <!-- ===== Country chooser popup (stable, centered) ===== -->
+  <div id="countryPopup" class="fixed inset-0 z-40 flex items-center justify-center" style="background:rgba(0,0,0,0.6);">
+    <div class="glass max-w-md w-[92%]" role="dialog" aria-modal="true" aria-labelledby="countryTitle">
+      <h2 id="countryTitle" class="text-xl font-bold mb-1">🌍 Select your country</h2>
+      <p class="small muted mb-4">Content (activation fee, payouts) will be customized for your country.</p>
+
+      <select id="countrySelect" class="w-full border rounded p-2 mb-3">
+        <option value="">— Choose country —</option>
+        <option value="kenya">🇰🇪 Kenya</option>
+        <option value="uganda">🇺🇬 Uganda</option>
+        <option value="ghana">🇬🇭 Ghana</option>
+        <option value="botswana">🇧🇼 Botswana</option>
+        <option value="malawi">🇲🇼 Malawi</option>
+      </select>
+
+      <div class="flex gap-3">
+        <button id="chooseCountryBtn" class="btn btn-primary flex-1">Continue</button>
+        <button id="popupCancel" class="btn btn-ghost flex-1">Cancel</button>
       </div>
-      <div class="flex items-center gap-2">
-        <button id="shareBtn" class="btn btn-ghost text-sm" title="Share">
-          <span>Share</span>
-        </button>
-        <button id="changeCountryBtn" class="btn btn-primary text-sm">
-          <span id="changeCountryLabel">Choose Country</span>
-        </button>
-      </div>
+
+      <p class="small muted mt-3">You can change country anytime via "Change Country".</p>
     </div>
   </div>
 
-  <!-- ===== Main shell ===== -->
-  <main class="page-wrap space-y-4">
-    <!-- Hero / notice — never blank -->
-    <section class="glass rounded-2xl p-4 sm:p-6 text-white">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+  <!-- ===== Main page container (hidden until country chosen) ===== -->
+  <div id="app" class="page" style="display:none;">
+    <header class="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <h1 class="text-2xl font-extrabold">TrendQash Agencies</h1>
+        <div class="small muted">Local tasks · Local payouts · Real support</div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="glass small px-3 py-1 rounded">Members joined this week: <strong id="liveCount">245</strong></div>
+        <button id="changeCountryBtnTop" class="btn btn-ghost small">Change Country</button>
+        <button id="shareTopBtn" class="btn btn-ghost small">Share</button>
+      </div>
+    </header>
+
+    <!-- Country header -->
+    <section id="countryHeader" class="glass mb-4">
+      <div class="flex items-center justify-between gap-4">
         <div>
-          <h1 class="text-xl sm:text-2xl font-extrabold">Welcome to TrendQash</h1>
-          <p class="text-sm opacity-85 mt-1">
-            Select your country to load localized tasks, payouts, and join steps.
-          </p>
-          <div class="mt-2 flex flex-wrap gap-2">
-            <span class="chip">Fast mobile</span>
-            <span class="chip">Local payouts</span>
-            <span class="chip">WhatsApp support</span>
-          </div>
+          <h2 id="countryNameHeader" class="text-lg font-bold">—</h2>
+          <div id="countryTagline" class="small muted">Choose a country to see local payouts</div>
         </div>
-        <div class="flex items-center gap-2">
-          <button id="openChooserBtn" class="btn btn-dark text-sm">Select Country</button>
+        <div style="text-align:right">
+          <div class="small muted">Activation fee</div>
+          <div id="activationFee" class="font-semibold">—</div>
         </div>
       </div>
     </section>
 
-    <!-- Content host (Parts 2–4 render into this) -->
-    <section id="countryContent" class="space-y-4">
-      <!-- Skeleton placeholders shown until country is selected -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div class="glass rounded-2xl p-4">
-          <div class="h-6 w-40 skeleton rounded mb-3"></div>
-          <div class="h-28 skeleton rounded"></div>
-        </div>
-        <div class="glass rounded-2xl p-4">
-          <div class="h-6 w-48 skeleton rounded mb-3"></div>
-          <div class="h-28 skeleton rounded"></div>
-        </div>
-      </div>
-      <div class="glass rounded-2xl p-4">
-        <div class="h-6 w-56 skeleton rounded mb-3"></div>
-        <div class="h-20 skeleton rounded"></div>
-      </div>
-    </section>
-  </main>
+    <!-- CONTENT -->
+    <main id="countryContent" class="space-y-6">
+      <!-- Part 2 (Ways of earnings) will render here -->
+    </main>
 
-  <!-- ===== Country chooser popup ===== -->
-  <div id="countryPopup" class="backdrop" role="dialog" aria-modal="true" aria-labelledby="countryTitle">
-    <div class="glass rounded-2xl w-[92%] max-w-md p-4 sm:p-6 text-white">
-      <div class="flex items-start justify-between">
-        <div>
-          <h2 id="countryTitle" class="text-lg sm:text-xl font-bold">Select your country</h2>
-          <p class="text-xs sm:text-sm opacity-85 mt-1">Your experience will be tailored to your location.</p>
-        </div>
-        <button id="closePopupBtn" class="btn btn-ghost text-xs">Close</button>
-      </div>
-
-      <div class="mt-4">
-        <label class="text-sm opacity-85">Country</label>
-        <select id="countrySelect" class="mt-1 w-full rounded-lg bg-white/10 text-white p-3 border border-white/20">
-          <option value="">— Choose —</option>
-          <option value="kenya">🇰🇪 Kenya</option>
-          <option value="uganda">🇺🇬 Uganda</option>
-          <option value="botswana">🇧🇼 Botswana</option>
-          <option value="malawi">🇲🇼 Malawi</option>
-          <option value="ghana">🇬🇭 Ghana</option>
-        </select>
-      </div>
-
-      <div class="mt-4 flex items-center justify-between gap-2">
-        <div class="text-[11px] opacity-70">
-          Your choice is saved. You can change it anytime.
-        </div>
-        <div class="flex gap-2">
-          <button id="cancelChooseBtn" class="btn btn-ghost text-xs">Cancel</button>
-          <button id="confirmChooseBtn" class="btn btn-primary text-xs">Continue</button>
-        </div>
-      </div>
-    </div>
+    <footer class="small muted mt-6">© TrendQash Agencies — Support: WhatsApp +254717028877</footer>
   </div>
 
-  <!-- ===== Core bootstrap (Part 1 only) ===== -->
   <script>
-    (function(){
-      const $ = (s, r = document) => r.querySelector(s);
-      const countryPopup = $("#countryPopup");
-      const countrySelect = $("#countrySelect");
-      const changeCountryBtn = $("#changeCountryBtn");
-      const openChooserBtn = $("#openChooserBtn");
-      const closePopupBtn = $("#closePopupBtn");
-      const cancelChooseBtn = $("#cancelChooseBtn");
-      const confirmChooseBtn = $("#confirmChooseBtn");
-      const changeCountryLabel = $("#changeCountryLabel");
-
-      // countries list (display only in Part 1; full configs come in Part 2–4)
-      const COUNTRIES_META = {
-        kenya:   { flag:"🇰🇪", name:"Kenya" },
-        uganda:  { flag:"🇺🇬", name:"Uganda" },
-        botswana:{ flag:"🇧🇼", name:"Botswana" },
-        malawi:  { flag:"🇲🇼", name:"Malawi" },
-        ghana:   { flag:"🇬🇭", name:"Ghana" }
-      };
-
-      function openPopup()  { countryPopup.classList.add("show"); }
-      function closePopup() { countryPopup.classList.remove("show"); }
-
-      function setCountry(key){
-        if(!COUNTRIES_META[key]) return;
-        localStorage.setItem("selectedCountry", key);
-        const meta = COUNTRIES_META[key];
-        changeCountryLabel.textContent = `${meta.flag} ${meta.name}`;
-        document.title = `TrendQash — ${meta.name}`;
-        // Fire a custom event so Parts 2–4 can render the correct content
-        document.dispatchEvent(new CustomEvent("country:changed", { detail: { key } }));
+  // ========== Data ========== (small, static, fast)
+  const DATA = {
+    kenya: {
+      name:"Kenya", currency:"KES", activation:550,
+      payouts: {
+        youtube:50, memes:50, tiktok:50, survey:50, ads:50, invite:3000, rank:500, welcome:150
       }
-
-      // Initial selection (no fallback auto-load; we wait for a user selection or saved setting)
-      const saved = localStorage.getItem("selectedCountry");
-      if(saved && COUNTRIES_META[saved]) {
-        setCountry(saved);
-      } else {
-        // Pop the chooser on first visit so users don’t see a blank or the wrong country
-        openPopup();
-      }
-
-      // Button wiring
-      changeCountryBtn.addEventListener("click", openPopup);
-      openChooserBtn.addEventListener("click", openPopup);
-      closePopupBtn.addEventListener("click", closePopup);
-      cancelChooseBtn.addEventListener("click", closePopup);
-      confirmChooseBtn.addEventListener("click", () => {
-        const val = countrySelect.value;
-        if(!val) { alert("Please choose a country."); return; }
-        setCountry(val);
-        closePopup();
-      });
-
-      // Share (navigator.share if available; fallback to copy URL)
-      $("#shareBtn").addEventListener("click", async () => {
-        const shareData = {
-          title: document.title,
-          text: "Join me on TrendQash — local tasks & payouts.",
-          url: location.href
-        };
-        try {
-          if(navigator.share) {
-            await navigator.share(shareData);
-          } else {
-            await navigator.clipboard.writeText(shareData.url);
-            alert("Link copied to clipboard!");
-          }
-        } catch(e) {
-          // Ignore user cancellation
-        }
-      });
-
-      // Small accessibility nicety: close popup on Escape
-      document.addEventListener("keydown", (e) => {
-        if(e.key === "Escape") closePopup();
-      });
-
-    })();
-  </script>
-<!-- ===================== PART 2: Ways of Earnings ===================== -->
-<section id="earningsSection" class="space-y-10 relative z-10">
-  <h2 class="text-3xl font-extrabold text-center text-white drop-shadow-lg">
-    💼 Ways of Earnings in <span id="countryName">Kenya</span>
-  </h2>
-
-  <!-- Dynamic Earnings Cards -->
-  <div id="earningsCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-
-  <!-- Earnings Calculator -->
-  <div class="glass p-6 rounded-2xl shadow-lg animate-fadeIn">
-    <h3 class="text-xl font-bold mb-4 text-white">🧮 Earnings Calculator</h3>
-    <label for="taskCount" class="block text-sm mb-2 text-white">Enter number of tasks you do daily:</label>
-    <input type="number" id="taskCount" min="1" value="10"
-      class="w-full px-3 py-2 rounded-lg mb-4 text-slate-900" />
-    <button id="calcBtn"
-      class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-lg w-full font-semibold shadow animate-pulse">
-      Calculate
-    </button>
-    <div id="calcResult" class="mt-4 text-white font-semibold"></div>
-  </div>
-
-  <!-- Earnings Table -->
-  <div class="glass p-6 rounded-2xl shadow-lg animate-fadeIn">
-    <h3 class="text-xl font-bold mb-4 text-white">📊 Earnings Summary</h3>
-    <table class="w-full text-sm text-left text-white">
-      <thead>
-        <tr class="bg-gradient-to-r from-cyan-400 to-blue-500 text-black">
-          <th class="px-4 py-2">Task</th>
-          <th class="px-4 py-2">Rate</th>
-          <th class="px-4 py-2">Example Daily</th>
-        </tr>
-      </thead>
-      <tbody id="earningsTable"></tbody>
-    </table>
-  </div>
-
-  <!-- Share CTA -->
-  <div class="glass p-6 rounded-2xl text-center animate-fadeIn">
-    <h3 class="text-xl font-bold text-white mb-2">🔥 Share TrendQash</h3>
-    <p class="text-white mb-4">Invite friends & multiply your earnings instantly.</p>
-    <div class="flex gap-4 justify-center">
-      <a id="shareWhatsApp" href="#" target="_blank"
-        class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg shadow heartbeat">📲 WhatsApp</a>
-      <a id="shareFacebook" href="#" target="_blank"
-        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow heartbeat">📘 Facebook</a>
-    </div>
-  </div>
-</section>
-
-<script>
-/* ===================== Part 2 Script ===================== */
-const earningsData = {
-  kenya: {
-    fee: "550 KES",
-    currency: "KES",
-    tasks: [
-      { icon: "🎥", name: "Watch YouTube videos", rate: 50 },
-      { icon: "😂", name: "Memes", rate: 50 },
-      { icon: "📱", name: "Watch TikTok videos", rate: 50 },
-      { icon: "📝", name: "Answer Surveys", rate: 50 },
-      { icon: "📺", name: "Click Netflix Ads", rate: 50 },
-      { icon: "👥", name: "Invite Friends", rate: 3000 },
-      { icon: "🏆", name: "Agent Ranking", rate: 500 },
-      { icon: "🎁", name: "Welcome Bonus", rate: 150 }
-    ]
-  },
-  uganda: {
-    fee: "20,000 UGX",
-    currency: "UGX",
-    tasks: [
-      { icon: "🎥", name: "Watch YouTube videos", rate: 2000 },
-      { icon: "😂", name: "Memes", rate: 2000 },
-      { icon: "📱", name: "Watch TikTok videos", rate: 2000 },
-      { icon: "📝", name: "Answer Surveys", rate: 2000 },
-      { icon: "📺", name: "Click Netflix Ads", rate: 2000 },
-      { icon: "👥", name: "Invite Friends", rate: 8000 },
-      { icon: "🏆", name: "Agent Ranking", rate: 2000 },
-      { icon: "🎁", name: "Welcome Bonus", rate: 5000 }
-    ]
-  },
-  ghana: {
-    fee: "80 GHC",
-    currency: "GHC",
-    tasks: [
-      { icon: "🎥", name: "Watch YouTube videos", rate: 15 },
-      { icon: "😂", name: "Memes", rate: 15 },
-      { icon: "📱", name: "Watch TikTok videos", rate: 15 },
-      { icon: "📝", name: "Answer Surveys", rate: 15 },
-      { icon: "📺", name: "Click Netflix Ads", rate: 15 },
-      { icon: "👥", name: "Invite Friends", rate: 120 },
-      { icon: "🏆", name: "Agent Ranking", rate: 40 },
-      { icon: "🎁", name: "Welcome Bonus", rate: 25 }
-    ]
-  },
-  botswana: {
-    fee: "100 Pula",
-    currency: "Pula",
-    tasks: [
-      { icon: "🎥", name: "Watch YouTube videos", rate: 10 },
-      { icon: "😂", name: "Memes", rate: 10 },
-      { icon: "📱", name: "Watch TikTok videos", rate: 10 },
-      { icon: "📝", name: "Answer Surveys", rate: 10 },
-      { icon: "📺", name: "Click Netflix Ads", rate: 10 },
-      { icon: "👥", name: "Invite Friends", rate: 100 },
-      { icon: "🏆", name: "Agent Ranking", rate: 20 },
-      { icon: "🎁", name: "Welcome Bonus", rate: 15 }
-    ]
-  },
-  malawi: {
-    fee: "12,000 MWK",
-    currency: "MWK",
-    tasks: [
-      { icon: "🎥", name: "Watch YouTube videos", rate: 500 },
-      { icon: "😂", name: "Memes", rate: 500 },
-      { icon: "📱", name: "Watch TikTok videos", rate: 500 },
-      { icon: "📝", name: "Answer Surveys", rate: 500 },
-      { icon: "📺", name: "Click Netflix Ads", rate: 500 },
-      { icon: "👥", name: "Invite Friends", rate: 5000 },
-      { icon: "🏆", name: "Agent Ranking", rate: 1000 },
-      { icon: "🎁", name: "Welcome Bonus", rate: 1500 }
-    ]
-  }
-};
-
-// Render earnings
-function renderEarnings(country) {
-  const data = earningsData[country];
-  document.getElementById("countryName").innerText = country.toUpperCase();
-
-  const cardContainer = document.getElementById("earningsCards");
-  cardContainer.innerHTML = "";
-  data.tasks.forEach((t, i) => {
-    const colorClasses = [
-      "from-pink-500 to-purple-500",
-      "from-green-400 to-blue-500",
-      "from-yellow-400 to-orange-500",
-      "from-indigo-400 to-cyan-400"
-    ];
-    const color = colorClasses[i % colorClasses.length];
-    cardContainer.innerHTML += `
-      <div class="earning-card p-4 rounded-xl shadow text-white bg-gradient-to-r ${color} animate-fadeIn">
-        <div class="text-2xl mb-2">${t.icon}</div>
-        <h4 class="font-bold">${t.name}</h4>
-        <p>Rate: <strong>${t.rate} ${data.currency}</strong></p>
-      </div>
-    `;
-  });
-
-  // Fill table
-  const tableBody = document.getElementById("earningsTable");
-  tableBody.innerHTML = "";
-  data.tasks.forEach((t, i) => {
-    const bg = i % 2 === 0 ? "bg-white/10" : "bg-white/5";
-    tableBody.innerHTML += `
-      <tr class="${bg}">
-        <td class="px-4 py-2">${t.icon} ${t.name}</td>
-        <td class="px-4 py-2">${t.rate} ${data.currency}</td>
-        <td class="px-4 py-2">≈ ${(t.rate * 10).toLocaleString()} ${data.currency}/day</td>
-      </tr>
-    `;
-  });
-
-  // Update calculator
-  document.getElementById("calcBtn").onclick = () => {
-    const tasks = parseInt(document.getElementById("taskCount").value) || 0;
-    const avgRate = data.tasks.filter(t => t.rate < 1000).reduce((a, b) => a + b.rate, 0) / 5;
-    const daily = tasks * avgRate;
-    const monthly = daily * 30;
-    document.getElementById("calcResult").innerHTML =
-      `With <strong>${tasks}</strong> tasks daily, you earn about 
-      <strong>${daily.toLocaleString()} ${data.currency}/day</strong> 
-      and <strong>${monthly.toLocaleString()} ${data.currency}/month</strong>.`;
+    },
+    uganda: {
+      name:"Uganda", currency:"UGX", activation:20000,
+      payouts: { youtube:1500, memes:1500, tiktok:1500, survey:1500, ads:1500, invite:20000, rank:4000, welcome:5000 }
+    },
+    ghana: {
+      name:"Ghana", currency:"GHC", activation:80,
+      payouts: { youtube:20, memes:20, tiktok:20, survey:20, ads:20, invite:200, rank:50, welcome:20 }
+    },
+    botswana: {
+      name:"Botswana", currency:"BWP", activation:100,
+      payouts: { youtube:40, memes:40, tiktok:40, survey:40, ads:40, invite:400, rank:100, welcome:30 }
+    },
+    malawi: {
+      name:"Malawi", currency:"MWK", activation:12000,
+      payouts: { youtube:2000, memes:2000, tiktok:2000, survey:2000, ads:2000, invite:6000, rank:1500, welcome:3000 }
+    }
   };
 
-  // Share buttons
-  document.getElementById("shareWhatsApp").href =
-    `https://wa.me/?text=🔥 Join TrendQash in ${country.toUpperCase()}! Earn daily via tasks. Sign up today!`;
-  document.getElementById("shareFacebook").href =
-    `https://www.facebook.com/sharer/sharer.php?u=https://trendqash.com`;
-}
+  // earning methods metadata (order & descriptions)
+  const METHODS = [
+    { key:"youtube", icon:"🎥", title:"Watch YouTube Videos",
+      desc:"Watch approved short videos and mark them as completed. Videos are checked for view duration and engagement. Payments are credited after verification." },
+    { key:"memes", icon:"😂", title:"Create & Post Memes",
+      desc:"Create or share verified memes. Submissions are reviewed; approved posts earn payouts. Good memes and correct tagging speed approval." },
+    { key:"tiktok", icon:"📱", title:"Watch TikTok Clips",
+      desc:"Short TikTok-style clips — watch, engage, and confirm completion. These tasks are fast and frequent." },
+    { key:"survey", icon:"📝", title:"Answer Surveys",
+      desc:"Short surveys (multiple-choice). Honest answers are needed; each completed survey pays a fixed fee." },
+    { key:"ads", icon:"📺", title:"Click/Interact Ads",
+      desc:"View or interact with sponsor ads (e.g. promotional content). Follow instructions for the ad task to qualify." },
+    { key:"invite", icon:"👥", title:"Invite Friends (Referrals)",
+      desc:"Invite friends using your referral link. Bonuses are credited when invites register and activate — use clear instructions for your invitees." },
+    { key:"rank", icon:"🏆", title:"Agent Ranking & Bonuses",
+      desc:"Agents climb ranks by completing tasks and referrals. Ranking bonuses are granted at milestone thresholds." },
+    { key:"welcome", icon:"🎁", title:"Welcome Bonus",
+      desc:"One-time welcome bonus given immediately after you activate your account via the official registration flow." }
+  ];
 
-// Default load
-renderEarnings("kenya");
-</script>
-<!-- ===================== END PART 2 ===================== -->
-<!-- ===================== PART 3: How to Join, WhatsApp, Chatbot ===================== -->
-<section id="joinSection" class="space-y-10 relative z-10">
-  <h2 class="text-3xl font-extrabold text-center text-white drop-shadow-lg">
-    🚀 How to Join TrendQash
-  </h2>
+  // ===== Utilities =====
+  const $ = (s, r=document) => r.querySelector(s);
+  const $all = (s, r=document) => Array.from(r.querySelectorAll(s));
+  const fmt = n => (typeof n === 'number') ? n.toLocaleString() : n;
 
-  <!-- Join Instructions -->
-  <div class="glass p-6 rounded-2xl shadow-lg border-4 border-transparent animate-borderLight">
-    <h3 class="text-2xl font-bold text-white mb-4">📝 Registration Steps</h3>
-    <ul id="joinSteps" class="space-y-3 text-white font-medium"></ul>
-    <div class="mt-6 text-center">
-      <a href="https://www.trendqash.com/user/register.php?ref=Teranchamp" 
-         target="_blank"
-         class="px-6 py-3 bg-gradient-to-r from-green-400 to-blue-500 text-white rounded-xl font-semibold shadow-lg heartbeat">
-         👉 Click Here to Join
-      </a>
-    </div>
-  </div>
+  // selected country value (key)
+  let SELECTED = null;
 
-  <!-- WhatsApp Send -->
-  <div class="glass p-6 rounded-2xl text-center border-4 border-transparent animate-borderLight">
-    <h3 class="text-xl font-bold text-white mb-2">💚 Contact via WhatsApp</h3>
-    <p class="text-white mb-4">Chat with our team directly on WhatsApp for help or fast activation.</p>
-    <a href="https://wa.me/254701234567?text=Hello%20TrendQash!%20I%20want%20to%20join" 
-       target="_blank"
-       class="bg-green-500 text-white px-6 py-3 rounded-xl font-semibold shadow-lg relative overflow-hidden heartbeat">
-       📲 Send WhatsApp Message
-       <span class="moving-light"></span>
-    </a>
-  </div>
+  // ===== DOM references =====
+  const popup = $('#countryPopup');
+  const countrySelect = $('#countrySelect');
+  const chooseBtn = $('#chooseCountryBtn');
+  const cancelPopup = $('#popupCancel');
+  const app = $('#app');
+  const headerName = $('#countryNameHeader');
+  const headerTag = $('#countryTagline');
+  const activationFeeEl = $('#activationFee');
+  const contentHost = $('#countryContent');
+  const changeTop = $('#changeCountryBtnTop');
+  const shareTop = $('#shareTopBtn');
+  const whFloat = $('#whatsappFloat');
 
-  <!-- Testimonials -->
-  <div class="glass p-6 rounded-2xl shadow-lg">
-    <h3 class="text-xl font-bold text-white mb-4">💬 What Members Say</h3>
-    <div id="testimonialSlider" class="overflow-hidden relative">
-      <div class="flex transition-transform duration-700" id="testimonialTrack">
-        <div class="min-w-full p-4 text-white">🌟 “I made my first 5,000 in just 3 days!” — James, Kenya</div>
-        <div class="min-w-full p-4 text-white">🔥 “This works perfectly in Ghana. Love it!” — Ama, Ghana</div>
-        <div class="min-w-full p-4 text-white">💸 “Daily payouts are real. No regrets!” — Thabo, Botswana</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Chatbot Floating -->
-<div id="chatbotBox" 
-     class="fixed bottom-5 right-5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-4 rounded-2xl shadow-xl w-72 hidden">
-  <h4 class="font-bold mb-2">🤖 TrendQash Chatbot</h4>
-  <div id="chatContent" class="h-32 overflow-y-auto bg-white/10 p-2 rounded mb-2 text-sm"></div>
-  <input id="chatInput" type="text" placeholder="Ask me..." 
-         class="w-full px-2 py-1 rounded bg-white text-black"/>
-</div>
-<button onclick="toggleChat()" 
-        class="fixed bottom-5 right-5 bg-pink-500 text-white p-3 rounded-full shadow-lg">
-  💬
-</button>
-
-<style>
-@keyframes heartbeat {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-.heartbeat { animation: heartbeat 1.5s infinite; }
-.moving-light {
-  position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent);
-  animation: slideLight 2s infinite;
-}
-@keyframes slideLight { 0%{left:-100%} 100%{left:100%} }
-@keyframes borderLight {
-  0% { border-image: linear-gradient(90deg, #ff00ff, #00ffff) 1; }
-  100% { border-image: linear-gradient(90deg, #00ffff, #ff00ff) 1; }
-}
-.animate-borderLight { animation: borderLight 4s linear infinite alternate; }
-</style>
-
-<script>
-// Steps by country
-const joinData = {
-  kenya: ["Activation Fee: 550 KES", "Register online", "Pay activation fee", "Start earning instantly"],
-  uganda: ["Activation Fee: 20,000 UGX", "Register online", "Pay activation fee", "Start earning instantly"],
-  ghana: ["Activation Fee: 80 GHC", "Register online", "Pay activation fee", "Start earning instantly"],
-  botswana: ["Activation Fee: 100 Pula", "Register online", "Pay activation fee", "Start earning instantly"],
-  malawi: ["Activation Fee: 12,000 MWK", "Register online", "Pay activation fee", "Start earning instantly"]
-};
-
-// Render steps dynamically (default Kenya)
-function renderJoin(country="kenya"){
-  const ul = document.getElementById("joinSteps");
-  ul.innerHTML = "";
-  joinData[country].forEach(step=>{
-    ul.innerHTML += `<li>✅ ${step}</li>`;
+  // ===== Event wiring =====
+  chooseBtn.addEventListener('click', ()=> {
+    const val = countrySelect.value;
+    if(!val){ alert('Please select a country'); return; }
+    setCountry(val);
+    popup.style.display = 'none';
+    app.style.display = 'block';
   });
-}
-renderJoin("kenya");
 
-// Chatbot simple demo
-function toggleChat(){
-  const box = document.getElementById("chatbotBox");
-  box.classList.toggle("hidden");
-}
-document.getElementById("chatInput").addEventListener("keypress", function(e){
-  if(e.key === "Enter"){
-    let val = this.value;
-    document.getElementById("chatContent").innerHTML += `<div>👤: ${val}</div>`;
-    this.value="";
-    setTimeout(()=> {
-      document.getElementById("chatContent").innerHTML += `<div>🤖: Thanks for your message! We'll assist you.</div>`;
-    },1000);
-  }
-});
+  cancelPopup.addEventListener('click', ()=> {
+    const saved = localStorage.getItem('trend_country');
+    if(saved && DATA[saved]) {
+      setCountry(saved);
+      popup.style.display = 'none';
+      app.style.display = 'block';
+    } else {
+      alert('Please select a country to continue.');
+    }
+  });
 
-// Testimonial slider auto-scroll
-let index=0;
-setInterval(()=>{
-  index=(index+1)%3;
-  document.getElementById("testimonialTrack").style.transform=`translateX(-${index*100}%)`;
-},4000);
-</script>
-<!-- ===================== END PART 3 ===================== -->
-<!-- ===================== PART 4: FAQ, Leaderboard, Share ===================== -->
-<section id="finalSection" class="space-y-10 relative z-10">
-  <h2 class="text-3xl font-extrabold text-center text-white drop-shadow-lg">
-    🌟 More About TrendQash
-  </h2>
+  changeTop.addEventListener('click', ()=> {
+    // show popup and preselect current
+    countrySelect.value = SELECTED || "";
+    popup.style.display = 'flex';
+  });
 
-  <!-- FAQ -->
-  <div class="glass p-6 rounded-2xl shadow-lg">
-    <h3 class="text-xl font-bold text-white mb-4">❓ FAQ</h3>
-    <div class="space-y-3 text-white">
-      <details class="bg-white/10 p-3 rounded"><summary>How do I get paid?</summary> Directly to your mobile money / bank.</details>
-      <details class="bg-white/10 p-3 rounded"><summary>When do payouts happen?</summary> Daily once you reach the minimum.</details>
-      <details class="bg-white/10 p-3 rounded"><summary>Is TrendQash legit?</summary> 100% verified and trusted by thousands.</details>
-    </div>
-  </div>
+  shareTop.addEventListener('click', async ()=> {
+    const url = location.href;
+    try{
+      if(navigator.share){ await navigator.share({title:'TrendQash', text:'Join TrendQash — earn local payouts', url}); }
+      else { await navigator.clipboard.writeText(url); alert('Link copied to clipboard'); }
+    }catch(e){ /* ignore user cancel */ }
+  });
 
-  <!-- Leaderboard -->
-  <div class="glass p-6 rounded-2xl shadow-lg">
-    <h3 class="text-xl font-bold text-white mb-4">🏆 Top Earners</h3>
-    <ul id="leaderboard" class="space-y-2 text-white"></ul>
-  </div>
+  // Chat toggles
+  $('#chatToggle').addEventListener('click', ()=> $('#chatWindow').classList.toggle('hidden'));
+  $('#chatClose').addEventListener('click', ()=> $('#chatWindow').classList.add('hidden'));
 
-  <!-- Dark Mode Toggle -->
-  <div class="text-center">
-    <button onclick="toggleDarkMode()" 
-            class="px-6 py-2 bg-indigo-600 text-white rounded-lg shadow-lg">
-      🌙 Toggle Dark Mode
-    </button>
-  </div>
-
-  <!-- Final Share -->
-  <div class="glass p-6 rounded-2xl text-center animate-fadeIn">
-    <h3 class="text-2xl font-bold text-white mb-2">📤 Share With Friends</h3>
-    <p class="text-white mb-4">Help your friends join TrendQash and earn more together!</p>
-    <button onclick="shareSite()" 
-            class="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-xl font-semibold shadow-lg heartbeat">
-      🔗 Share This Website
-    </button>
-  </div>
-</section>
-
-<script>
-// Leaderboard demo
-const leaderboardData = [
-  {name:"James (Kenya)", amount:"15,000 KES"},
-  {name:"Ama (Ghana)", amount:"1,200 GHC"},
-  {name:"Thabo (Botswana)", amount:"1,500 Pula"},
-  {name:"Chikondi (Malawi)", amount:"60,000 MWK"},
-  {name:"Aisha (Uganda)", amount:"200,000 UGX"}
-];
-document.getElementById("leaderboard").innerHTML = leaderboardData
-  .map(p=> `<li>🌟 ${p.name} — <strong>${p.amount}</strong></li>`)
-  .join("");
-
-// Dark mode toggle
-function toggleDarkMode(){
-  document.body.classList.toggle("bg-black");
-}
-
-// Share website
-function shareSite(){
-  if(navigator.share){
-    navigator.share({
-      title:"Join TrendQash",
-      text:"🔥 Earn daily by completing simple tasks with TrendQash Agencies.",
-      url:window.location.href
+  // quick replies in chat
+  $all('#chatWindow [data-quick]').forEach(btn => {
+    btn.addEventListener('click', (e)=>{
+      const q = e.target.getAttribute('data-quick');
+      $('#chatInput').value = q;
+      $('#chatSend').click();
     });
-  } else {
-    alert("Copy this link to share: "+window.location.href);
-  }
-}
-</script>
-<!-- ===================== END PART 4 ===================== -->
+  });
 
+  // send chat message
+  $('#chatSend').addEventListener('click', sendChatMessage);
+  $('#chatInput').addEventListener('keypress', (e)=> { if(e.key === 'Enter') sendChatMessage(); });
+
+  function sendChatMessage(){
+    const txt = $('#chatInput').value.trim();
+    if(!txt) return;
+    appendChat('You', txt);
+    $('#chatInput').value = '';
+    // simple canned responses (fast & offline)
+    setTimeout(()=> {
+      const resp = cannedReply(txt);
+      appendChat('Bot', resp);
+    }, 420);
+  }
+
+  function appendChat(sender, text){
+    const wrap = document.createElement('div');
+    wrap.innerHTML = `<div><strong>${sender}:</strong> ${escapeHtml(text)}</div>`;
+    $('#chatMessages').appendChild(wrap);
+    $('#chatMessages').scrollTop = $('#chatMessages').scrollHeight;
+  }
+
+  function cannedReply(msg){
+    const lc = msg.toLowerCase();
+    if(lc.includes('join') || lc.includes('how to join')) return `To join: select your country, register via the official link and pay the activation fee. Use the "Join Now" button on the page.`;
+    if(lc.includes('withdraw') || lc.includes('payment') || lc.includes('payout')) return `Withdrawals are processed via local payout channels (M-Pesa, MTN/ Airtel, bank transfers) depending on your country. Check the dashboard for steps.`;
+    if(lc.includes('earn') || lc.includes('tasks')) return `You earn from watching videos, posting memes, surveys, ad interactions, referrals and ranking bonuses. Each method card on the page has a calculator.`;
+    return `Thanks — a support agent will follow up on WhatsApp +254717028877 if needed.`;
+  }
+
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  // ===== WhatsApp floating button: set href dynamically when country changes =====
+  whFloat.addEventListener('click', (e)=> {
+    e.preventDefault();
+    if(!SELECTED){ alert('Choose a country first'); return; }
+    const info = DATA[SELECTED];
+    const phone = '+254717028877'.replace(/\+| /g,'');
+    const msg = `Hi TrendQash, I'm in ${info.name} and want to join. Activation fee: ${info.activation} ${info.currency}. Please guide me.`;
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+  });
+
+  // ===== Persisted selection on load =====
+  window.addEventListener('load', ()=>{
+    const saved = localStorage.getItem('trend_country');
+    if(saved && DATA[saved]){
+      setCountry(saved);
+      popup.style.display = 'none';
+      app.style.display = 'block';
+    } else {
+      popup.style.display = 'flex';
+    }
+    // small live count randomization (single op)
+    $('#liveCount').textContent = (200 + Math.floor(Math.random()*500)).toString();
+  });
+
+  // ===== Main rendering when country selected =====
+  function setCountry(key){
+    if(!DATA[key]) return;
+    SELECTED = key;
+    localStorage.setItem('trend_country', key);
+    const info = DATA[key];
+    headerName.textContent = `${info.name} — TrendQash`;
+    headerTag.textContent = `Earn in ${info.currency}. Local payouts & calculators shown below.`;
+    activationFeeEl.textContent = `${fmt(info.activation)} ${info.currency}`;
+
+    // render parts
+    renderPart2_Earnings(info);
+    renderPart3_Join(info);
+    renderPart4_FooterExtras(info);
+
+    // update WhatsApp anchor title/href (also used on click)
+    whFloat.setAttribute('title', `Chat on WhatsApp (${info.name})`);
+  }
+
+  // ===== PART 2: Render earnings with per-card calculators =====
+  function renderPart2_Earnings(info){
+    // clear top of content
+    contentHost.innerHTML = '';
+
+    // heading section
+    const headerSection = document.createElement('section');
+    headerSection.className = 'glass mb-2';
+    headerSection.innerHTML = `<div><h3 class="text-lg font-bold">Ways of Earning — ${info.name}</h3><div class="small muted">Each card below explains the task and includes a calculator for that task.</div></div>`;
+    contentHost.appendChild(headerSection);
+
+    // grid for cards
+    const grid = document.createElement('div');
+    grid.className = 'grid gap-4 grid-cols-responsive';
+    // render methods
+    METHODS.forEach(m => {
+      const rate = info.payouts[m.key];
+      const card = document.createElement('article');
+      card.className = 'task-card';
+      // card inner HTML
+      card.innerHTML = `
+        <div class="task-row">
+          <div class="task-left">
+            <div class="task-emoji">${m.icon}</div>
+            <div>
+              <div class="font-semibold">${m.title}</div>
+              <div class="small muted">${m.desc}</div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div class="font-semibold">${fmt(rate)} ${info.currency}${m.key==='invite' ? ' (max/day)' : ''}</div>
+            <div class="small muted">per ${m.key==='invite' ? 'referral' : 'item'}</div>
+          </div>
+        </div>
+
+        ${ m.key === 'welcome' ? `
+          <div style="margin-top:10px" class="small muted">One-time reward after activation: <strong>${fmt(rate)} ${info.currency}</strong></div>
+        ` : `
+          <div style="margin-top:10px;display:flex;gap:8px;align-items:center">
+            <input type="number" min="0" placeholder="${m.key==='invite' ? 'Enter invites' : 'Enter quantity'}"
+                   class="calc-input border p-2 rounded text-sm" data-method="${m.key}" />
+            <button class="calc-btn btn btn-primary text-sm subtle-pop" data-method="${m.key}">Calculate</button>
+          </div>
+          <div class="mt-2 result small muted" data-result="${m.key}"></div>
+        `}
+      `;
+      grid.appendChild(card);
+    });
+
+    contentHost.appendChild(grid);
+
+    // compact summary table
+    const summary = document.createElement('section');
+    summary.className = 'glass mt-4';
+    summary.innerHTML = `
+      <h4 class="font-bold mb-2">Example daily totals (illustrative)</h4>
+      <table style="width:100%;border-collapse:collapse" class="small">
+        <thead><tr style="text-align:left"><th style="padding:6px">Example</th><th style="padding:6px">Daily</th></tr></thead>
+        <tbody>
+          <tr><td style="padding:6px">10 YouTube videos</td><td style="padding:6px">${fmt(info.payouts.youtube*10)} ${info.currency}</td></tr>
+          <tr><td style="padding:6px">10 TikTok clips</td><td style="padding:6px">${fmt(info.payouts.tiktok*10)} ${info.currency}</td></tr>
+          <tr><td style="padding:6px">5 Surveys</td><td style="padding:6px">${fmt(info.payouts.survey*5)} ${info.currency}</td></tr>
+          <tr><td style="padding:6px">Invite 2 active friends</td><td style="padding:6px">${fmt(info.payouts.invite*2)} ${info.currency}</td></tr>
+        </tbody>
+      </table>
+    `;
+    contentHost.appendChild(summary);
+
+    // attach event listeners (event delegation for speed)
+    grid.addEventListener('click', function(evt){
+      const btn = evt.target.closest('.calc-btn');
+      if(!btn) return;
+      const method = btn.getAttribute('data-method');
+      const input = grid.querySelector(`.calc-input[data-method="${method}"]`);
+      const qty = Number(input?.value || 0);
+      const rate = info.payouts[method] || 0;
+      const resultEl = grid.querySelector(`.result[data-result="${method}"]`);
+      if(method === 'invite') {
+        if(qty <= 0) { resultEl.textContent = 'Enter number of invites.'; return; }
+        // invites often have caps; we show suggested example
+        const total = qty * rate;
+        resultEl.textContent = `Estimated referral reward: ${fmt(total)} ${info.currency} (depends on invite activation).`;
+      } else {
+        if(qty <= 0) { resultEl.textContent = 'Enter a quantity.'; return; }
+        const total = qty * rate;
+        resultEl.textContent = `Estimated payout: ${fmt(total)} ${info.currency}.`;
+      }
+    });
+  }
+
+  // ===== PART 3: How to Join & WhatsApp Send improvements =====
+  function renderPart3_Join(info){
+    // join section
+    const section = document.createElement('section');
+    section.className = 'glass';
+    section.innerHTML = `
+      <h3 class="text-lg font-bold mb-2">How to Join — ${info.name}</h3>
+      <ol class="small" style="margin-left:16px">
+        <li>Click the official register link (opens in a new tab).</li>
+        <li>Pay the activation fee: <strong>${fmt(info.activation)} ${info.currency}</strong>.</li>
+        <li>Complete profile, then start tasks and referrals.</li>
+      </ol>
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+        <a id="joinNowBtn" class="btn btn-primary subtle-pop" target="_blank" rel="noopener noreferrer">👉 Join Now</a>
+        <button id="copyJoin" class="btn btn-ghost subtle-pop">Copy Join Link</button>
+      </div>
+      <div class="small muted mt-2">Important: Only use the official registration link to activate your account.</div>
+    `;
+    contentHost.appendChild(section);
+
+    // link behaviors
+    $('#joinNowBtn').href = 'https://www.trendqash.com/user/register.php?ref=Teranchamp';
+    $('#copyJoin').addEventListener('click', async ()=> {
+      try{
+        await navigator.clipboard.writeText('https://www.trendqash.com/user/register.php?ref=Teranchamp');
+        alert('Join link copied to clipboard');
+      }catch(e){
+        alert('Copy failed, please copy manually: https://www.trendqash.com/user/register.php?ref=Teranchamp');
+      }
+    });
+  }
+
+  // ===== PART 4: FAQ, Leaderboard, Share CTA =====
+  function renderPart4_FooterExtras(info){
+    // FAQ
+    const faq = document.createElement('section');
+    faq.className = 'glass';
+    faq.innerHTML = `
+      <h4 class="font-bold mb-2">FAQ</h4>
+      <div class="small">
+        <strong>Q:</strong> When are payouts processed?<br/><strong>A:</strong> Payout windows depend on the campaign; usually processed weekly after verification.<br/><br/>
+        <strong>Q:</strong> Can I use other payment methods?<br/><strong>A:</strong> Payment channels depend on country (M-Pesa, MTN/Airtel, bank transfers). Contact support for details.
+      </div>
+    `;
+    contentHost.appendChild(faq);
+
+    // Leaderboard (sample/mock)
+    const leader = document.createElement('section');
+    leader.className = 'glass';
+    leader.innerHTML = `
+      <h4 class="font-bold mb-2">Top Earners (sample)</h4>
+      <ul class="small" style="margin-left:16px">
+        <li>Mary — ${fmt(12500)} ${info.currency}</li>
+        <li>James — ${fmt(9800)} ${info.currency}</li>
+        <li>Aisha — ${fmt(7300)} ${info.currency}</li>
+      </ul>
+    `;
+    contentHost.appendChild(leader);
+
+    // Share CTA
+    const share = document.createElement('section');
+    share.className = 'glass text-center';
+    share.innerHTML = `
+      <h4 class="font-bold mb-2">Share TrendQash</h4>
+      <p class="small muted mb-2">Help your friends join — sharing increases referral chances.</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button id="shareWhats" class="btn btn-primary subtle-pop">Share via WhatsApp</button>
+        <button id="shareCopy" class="btn btn-ghost subtle-pop">Copy Link</button>
+      </div>
+    `;
+    contentHost.appendChild(share);
+
+    // share handlers
+    $('#shareWhats').addEventListener('click', ()=> {
+      const text = `Join me on TrendQash (${info.name}). Register here: https://www.trendqash.com/user/register.php?ref=Teranchamp`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    });
+    $('#shareCopy').addEventListener('click', async ()=> {
+      try{ await navigator.clipboard.writeText('https://www.trendqash.com/user/register.php?ref=Teranchamp'); alert('Link copied'); }
+      catch(e){ alert('Copy failed — URL: https://www.trendqash.com/user/register.php?ref=Teranchamp'); }
+  }
+
+  </script>
 </body>
-  </html>
+</html>
