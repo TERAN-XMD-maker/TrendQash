@@ -1,921 +1,783 @@
-<!-- ========================== TrendQash Portal — DARK THEME + BOLD CANVAS + MODERN FAQ ========================== -->
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<!doctype html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TrendQash Portal</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>TrendQash — Multi-Country Portal</title>
+  <meta name="description" content="TrendQash Agencies — localized tasks, payouts, calculators, chatbot, and WhatsApp support."/>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    // Tailwind config: enable class-based dark mode
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          boxShadow: {
-            soft: '0 8px 22px rgba(2, 6, 23, 0.08)',
-            softDark: '0 8px 22px rgba(0,0,0,0.45)',
-          }
-        }
-      }
-    }
-  </script>
   <style>
-    /* Moving trust banner */
-    .marquee {
-      overflow: hidden;
-      position: relative;
-      background: #111827;
-      color: #fff;
+    :root{
+      --bg1:#0b1220; --bg2:#0e1426; --border:rgba(255,255,255,0.08);
+      --white: #fff; --muted:#a5b4fc; --accent:#22d3ee; --card:#0f172a;
+      --canva1:#7bdff6; --canva2:#9b7bff; --canva3:#ffd166; --canva4:#ff6b6b; --canva5:#6bffb3;
     }
-    .marquee p {
-      display: inline-block;
-      white-space: nowrap;
-      padding-left: 100%;
-      animation: marquee 15s linear infinite;
+    html,body{height:100%}
+    body{
+      margin:0; background: radial-gradient(1200px 800px at 20% -10%, #18243e 0%, transparent 60%), linear-gradient(180deg, var(--bg1), var(--bg2));
+      color:#e5e7eb; font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
-    @keyframes marquee {
-      0%   { transform: translate(0, 0); }
-      100% { transform: translate(-100%, 0); }
-    }
-    .country-card:hover { transform: scale(1.05); transition: 0.3s; }
+    .glass{background:rgba(255,255,255,0.04); border:1px solid var(--border); backdrop-filter:blur(8px); border-radius:16px; box-shadow: 0 10px 40px rgba(0,0,0,.35)}
+    .glow-ring{ position:relative }
+    .glow-ring:before{ content:""; position:absolute; inset:-1px; border-radius:18px;
+      padding:1px; background: conic-gradient(from 0deg, var(--canva1), var(--canva2), var(--canva3), var(--canva4), var(--canva5), var(--canva1));
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; animation:ring 6s linear infinite}
+    @keyframes ring{to{transform: rotate(360deg)}}
 
-    /* ===== Bold Canvas Gradients (Light) ===== */
-    .earn-canvas-1 { 
-      background-image:
-        radial-gradient(60% 60% at 15% 10%, rgba(255,255,255,0.30), transparent 40%),
-        linear-gradient(135deg, #FF6B6B 0%, #FF8E53 45%, #FFD36E 100%);
-    }
-    .earn-canvas-2 { 
-      background-image:
-        radial-gradient(60% 60% at 85% 12%, rgba(255,255,255,0.28), transparent 40%),
-        linear-gradient(135deg, #36D1DC 0%, #5B86E5 100%);
-    }
-    .earn-canvas-3 { 
-      background-image:
-        radial-gradient(60% 60% at 10% 85%, rgba(255,255,255,0.25), transparent 40%),
-        linear-gradient(135deg, #1FD1A5 0%, #34D399 45%, #10B981 100%);
-    }
-    .earn-canvas-4 { 
-      background-image:
-        radial-gradient(60% 60% at 90% 80%, rgba(255,255,255,0.25), transparent 40%),
-        linear-gradient(135deg, #A18CD1 0%, #FBC2EB 100%);
-    }
-    .earn-canvas-5 {
-      background-image:
-        radial-gradient(60% 60% at 25% 20%, rgba(255,255,255,0.28), transparent 40%),
-        linear-gradient(135deg, #F7971E 0%, #FFD200 100%);
-    }
-    .earn-canvas-6 {
-      background-image:
-        radial-gradient(60% 60% at 80% 20%, rgba(255,255,255,0.22), transparent 40%),
-        linear-gradient(135deg, #00C6FF 0%, #0072FF 100%);
-    }
+    /* Canva-like alternating card accents */
+    .canva-a{ background-image: linear-gradient(135deg, rgba(123,223,246,.18), rgba(155,123,255,.12)); }
+    .canva-b{ background-image: linear-gradient(135deg, rgba(255,209,102,.18), rgba(255,107,107,.12)); }
+    .canva-c{ background-image: linear-gradient(135deg, rgba(107,255,179,.18), rgba(123,223,246,.12)); }
 
-    /* ===== Bold Canvas Gradients (Dark variants) ===== */
-    .dark .earn-canvas-1 { 
-      background-image:
-        radial-gradient(50% 50% at 20% 20%, rgba(255,255,255,0.06), transparent 40%),
-        linear-gradient(135deg, #B91C1C 0%, #C2410C 45%, #CA8A04 100%);
-    }
-    .dark .earn-canvas-2 { 
-      background-image:
-        radial-gradient(50% 50% at 80% 18%, rgba(255,255,255,0.06), transparent 40%),
-        linear-gradient(135deg, #0EA5E9 0%, #4338CA 100%);
-    }
-    .dark .earn-canvas-3 { 
-      background-image:
-        radial-gradient(50% 50% at 12% 78%, rgba(255,255,255,0.06), transparent 40%),
-        linear-gradient(135deg, #0F766E 0%, #0EA5A0 45%, #059669 100%);
-    }
-    .dark .earn-canvas-4 { 
-      background-image:
-        radial-gradient(50% 50% at 82% 82%, rgba(255,255,255,0.06), transparent 40%),
-        linear-gradient(135deg, #6D28D9 0%, #DB2777 100%);
-    }
-    .dark .earn-canvas-5 {
-      background-image:
-        radial-gradient(50% 50% at 28% 24%, rgba(255,255,255,0.06), transparent 40%),
-        linear-gradient(135deg, #D97706 0%, #F59E0B 100%);
-    }
-    .dark .earn-canvas-6 {
-      background-image:
-        radial-gradient(50% 50% at 76% 24%, rgba(255,255,255,0.06), transparent 40%),
-        linear-gradient(135deg, #0369A1 0%, #1D4ED8 100%);
-    }
+    /* Stable popup (no drifting) */
+    .popup-backdrop{ position: fixed; inset: 0; background: rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; z-index:50 }
+    .popup{ width:min(520px,92%); }
+    .popup.show { display:flex }
 
-    .task-card {
-      border-radius: 14px;
-      padding: 14px;
-      box-shadow: var(--card-shadow, 0 10px 26px rgba(2,6,23,.08));
-    }
-    .dark .task-card { --card-shadow: 0 10px 26px rgba(0,0,0,.45); }
+    /* Slide container when switching countries */
+    .slide-container{ position: relative; overflow: hidden }
+    .slide-track{ will-change: transform; transition: transform .45s ease; display: flex; width: 200% }
+    .slide-pane{ width: 100% }
 
-    /* Readable text on bold canvases */
-    .canvas-title { color: #0b1324; font-weight: 800; letter-spacing: .1px; }
-    .canvas-desc  { color: rgba(11,19,36,0.85); }
-    .dark .canvas-title { color: #F8FAFC; }
-    .dark .canvas-desc  { color: rgba(248,250,252,0.85); }
+    /* Heartbeat + moving light */
+    .heartbeat{ animation: beat 1.4s ease-in-out infinite }
+    @keyframes beat{ 0%,100%{transform:scale(1)} 25%{transform:scale(1.02)} 50%{transform:scale(0.98)} 75%{transform:scale(1.02)} }
+    .light-sweep{ position: relative; overflow: hidden }
+    .light-sweep:after{ content:""; position:absolute; top:0; left:-150%; width:50%; height:100%;
+      background: linear-gradient(115deg, transparent 0%, rgba(255,255,255,.15) 45%, rgba(255,255,255,.03) 60%, transparent 100%);
+      transform:skewX(-10deg); animation: sweep 3.6s linear infinite }
+    @keyframes sweep{ 0%{ left:-150% } 60%{ left:130% } 100%{ left:130% } }
 
-    /* WhatsApp compose canvas (light & dark aware) */
-    .wa-canvas {
-      background-image:
-        radial-gradient(circle at 10% 10%, rgba(255,255,255,0.05), transparent 8%),
-        linear-gradient(135deg, #34D399 0%, #10B981 50%, #059669 100%);
-      padding: 14px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(3, 7, 18, 0.12);
-      color: white;
-    }
-    .dark .wa-canvas {
-      background-image:
-        radial-gradient(circle at 12% 16%, rgba(255,255,255,0.06), transparent 10%),
-        linear-gradient(135deg, #065F46 0%, #047857 50%, #059669 100%);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.45);
-    }
-    .wa-canvas .wa-input {
-      background: rgba(255,255,255,0.98);
-      border-radius: 12px;
-      padding: 12px;
-      border: 0;
-      width: 100%;
-      box-sizing: border-box;
-      color: #071033;
-      min-height: 110px;
-    }
-    .dark .wa-canvas .wa-input {
-      background: rgba(255,255,255,0.95);
-      color: #0a122b;
-    }
-    .wa-canvas .wa-btn {
-      background: rgba(255,255,255,0.95);
-      color: #065F46;
-      padding: 10px 14px;
-      border-radius: 10px;
-      border: 0;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 6px 16px rgba(2,6,23,0.10);
-    }
+    /* Buttons */
+    .btn{ display:inline-flex; align-items:center; gap:.5rem; font-weight:700; border-radius:12px; padding:.7rem 1rem; border:1px solid var(--border) }
+    .btn-primary{ background:#0ea5e9; color:#0b1220 }
+    .btn-dark{ background:#0f172a; color:#fff }
+    .btn-ghost{ background:transparent; color:#e5e7eb }
+    .btn-outline{ background:transparent; border-color:#334155 }
 
-    /* Gallery tweaks */
-    #gallery img { border-radius: 12px; object-fit: cover; }
+    /* Inputs */
+    .input{ background: rgba(255,255,255,.04); border:1px solid var(--border); border-radius:12px; padding:.65rem .8rem; width:100%; color:#e5e7eb }
 
-    /* FAQ (animated accordion) */
-    .faq-item {
-      border-radius: 12px;
-      overflow: hidden;
-      transition: box-shadow .25s ease;
-    }
-    .faq-item.open { box-shadow: 0 12px 28px rgba(2,6,23,.10); }
-    .dark .faq-item.open { box-shadow: 0 12px 28px rgba(0,0,0,.45); }
-    .faq-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height .35s ease, opacity .25s ease;
-      opacity: 0;
-    }
-    .faq-item.open .faq-content {
-      opacity: 1;
-    }
-    .faq-chevron {
-      transition: transform .25s ease;
-    }
-    .faq-item.open .faq-chevron {
-      transform: rotate(180deg);
-    }
+    /* Earnings card expand */
+    .card{ border:1px solid var(--border); border-radius:16px; overflow:hidden }
+    .card-header{ cursor:pointer; }
+    .card-body{ display:none }
+    .card.open .card-body{ display:block; animation: fade .25s ease }
+    @keyframes fade{ from{opacity:.4; transform: translateY(-4px)} to{opacity:1; transform:none} }
 
-    /* Small screens */
-    @media (max-width:640px){
-      .earn-canvas-1, .earn-canvas-2, .earn-canvas-3, .earn-canvas-4, .earn-canvas-5, .earn-canvas-6 { padding:12px; }
-    }
+    /* Chip */
+    .chip{ padding:.25rem .55rem; border-radius:999px; font-size:.75rem; border:1px solid var(--border); background:rgba(255,255,255,.04); color:#cbd5e1 }
+
+    /* Marquee (legitimacy) */
+    .marquee{ overflow:hidden; white-space:nowrap }
+    .marquee-track{ display:inline-block; padding-left:100%; animation: marq 18s linear infinite; color:#0b1220; font-weight:800 }
+    @keyframes marq{ 0%{transform:translateX(0)} 100%{transform:translateX(-100%)} }
+
+    /* Small tweaks */
+    .muted{ color:#a3aed0 }
+    .accent{ color:#22d3ee }
+    .hstack{ display:flex; align-items:center; gap:.75rem }
+    .vstack{ display:flex; flex-direction:column; gap:.75rem }
+
+    /* Responsive grid helpers */
+    .grid-1{ display:grid; grid-template-columns:1fr; gap:1rem }
+    .grid-2{ display:grid; grid-template-columns:1fr; gap:1rem }
+    .grid-3{ display:grid; grid-template-columns:1fr; gap:1rem }
+    @media(min-width:640px){ .grid-2{ grid-template-columns: repeat(2, minmax(0,1fr)) } }
+    @media(min-width:840px){ .grid-3{ grid-template-columns: repeat(3, minmax(0,1fr)) } }
+
+    /* Prevent layout shift on mobile */
+    * { min-width:0 }
   </style>
 </head>
-
-<!-- Dark mode is toggled by adding/removing the "dark" class on <html> -->
-<body class="bg-gray-100 dark:bg-slate-900 min-h-screen flex flex-col text-slate-800 dark:text-slate-100">
-
-  <!-- Trust Caption -->
-  <div class="marquee py-2 text-sm font-semibold">
-    <p>Trusted by thousands across Africa 🌍 | Instant Payouts 💸 | Join today and start earning 🚀</p>
+<body>
+  <!-- Top marquee -->
+  <div class="py-2">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="bg-white/90 rounded-full px-3 py-2 marquee">
+        <div class="marquee-track">
+          ✅ TRENDQASH — Registered & Compliant • Country-specific payouts • Activation from KES 550 / GHC 80 / BWP 100 / MWK 12,000 / UGX 20,000 • Weekly withdrawals • WhatsApp Support.
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- Top bar with theme toggle -->
-  <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-900/70 backdrop-blur border-b border-slate-200 dark:border-slate-800">
-    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <span class="text-xl font-extrabold tracking-wide">TrendQash</span>
-        <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-600 text-white dark:bg-indigo-500">Portal</span>
+  <!-- Header -->
+  <header class="max-w-7xl mx-auto px-4 pt-4 pb-2">
+    <div class="flex items-start justify-between gap-3">
+      <div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold">TrendQash Agencies</h1>
+        <p class="text-sm muted mt-1">Localized tasks • Local payouts • Real members</p>
       </div>
-
-      <div class="flex items-center gap-2">
-        <button id="themeToggle" class="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-sm hover:bg-slate-50 dark:hover:bg-slate-800">
-          <span class="inline dark:hidden">🌙 Dark</span>
-          <span class="hidden dark:inline">☀️ Light</span>
-        </button>
+      <div class="hstack">
+        <button id="switchCountryBtn" class="btn btn-outline">🌍 Switch Country</button>
+        <button id="shareBtn" class="btn btn-primary light-sweep">🔗 Share</button>
       </div>
     </div>
   </header>
 
-  <!-- Country Selection Modal -->
-  <div id="countryModal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl p-6 max-w-lg w-full text-slate-800 dark:text-slate-100">
-      <h2 class="text-xl font-bold text-center mb-4">Select Your Country</h2>
-      <div class="grid grid-cols-2 gap-4">
-        <!-- Countries -->
-        <div class="country-card p-4 bg-gray-50 dark:bg-slate-700 rounded-xl cursor-pointer" data-country="malawi">
-          <p class="font-semibold">🇲🇼 Malawi</p>
-        </div>
-        <div class="country-card p-4 bg-gray-50 dark:bg-slate-700 rounded-xl cursor-pointer" data-country="botswana">
-          <p class="font-semibold">🇧🇼 Botswana</p>
-        </div>
-        <div class="country-card p-4 bg-gray-50 dark:bg-slate-700 rounded-xl cursor-pointer" data-country="kenya">
-          <p class="font-semibold">🇰🇪 Kenya</p>
-        </div>
-        <div class="country-card p-4 bg-gray-50 dark:bg-slate-700 rounded-xl cursor-pointer" data-country="ghana">
-          <p class="font-semibold">🇬🇭 Ghana</p>
-        </div>
-        <div class="country-card p-4 bg-gray-50 dark:bg-slate-700 rounded-xl cursor-pointer" data-country="uganda">
-          <p class="font-semibold">🇺🇬 Uganda</p>
+  <!-- Country chooser popup -->
+  <div id="countryPopup" class="popup-backdrop">
+    <div class="popup glass glow-ring p-5">
+      <h2 class="text-2xl font-extrabold mb-1">Select Your Country</h2>
+      <p class="text-sm muted mb-4">Pick your country to see accurate activation fees, payouts, and currency.</p>
+      <div class="vstack">
+        <select id="countrySelect" class="input">
+          <option value="">— Choose country —</option>
+          <option value="kenya">🇰🇪 Kenya</option>
+          <option value="ghana">🇬🇭 Ghana</option>
+          <option value="botswana">🇧🇼 Botswana</option>
+          <option value="malawi">🇲🇼 Malawi</option>
+          <option value="uganda">🇺🇬 Uganda</option>
+        </select>
+        <div class="hstack justify-between">
+          <button id="chooseCountryBtn" class="btn btn-primary">Continue</button>
+          <button id="cancelCountryBtn" class="btn btn-ghost">Cancel</button>
         </div>
       </div>
-      <button id="continueBtn" class="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg">Continue</button>
     </div>
   </div>
 
-  <!-- Content Wrapper -->
-  <main id="content" class="flex-grow p-4 space-y-6 max-w-5xl mx-auto w-full"></main>
-
-  <!-- Footer -->
-  <footer class="text-center text-xs text-gray-500 dark:text-slate-400 py-6">© TrendQash Agencies — Support: WhatsApp +254717028877</footer>
-
-  <!-- ================= DATA + JS ================= -->
-  <script>
-    /* ---------- Theme: load + toggle ---------- */
-    (function initTheme(){
-      const root = document.documentElement;
-      const stored = localStorage.getItem('tq_theme');
-      if (stored === 'dark') root.classList.add('dark');
-      if (stored === 'light') root.classList.remove('dark');
-      const btn = document.getElementById('themeToggle');
-      btn?.addEventListener('click', () => {
-        root.classList.toggle('dark');
-        localStorage.setItem('tq_theme', root.classList.contains('dark') ? 'dark' : 'light');
-      });
-    })();
-
-    /* ---------- Config: currencies, activation, payouts ---------- */
-    const ECON = {
-      kenya:   { name: "Kenya",   currency: "KES", activation: 550,   payouts:{ youtube:50, memes:50, tiktok:50, survey:50, ads:50, invite:3000, rank:500, welcome:150 } },
-      uganda:  { name: "Uganda",  currency: "UGX", activation: 20000, payouts:{ youtube:1500, memes:1500, tiktok:1500, survey:1500, ads:1500, invite:20000, rank:4000, welcome:5000 } },
-      ghana:   { name: "Ghana",   currency: "GHC", activation: 80,    payouts:{ youtube:20, memes:20, tiktok:20, survey:20, ads:20, invite:200,  rank:50,  welcome:20 } },
-      botswana:{ name: "Botswana",currency: "BWP", activation: 100,   payouts:{ youtube:40, memes:40, tiktok:40, survey:40, ads:40, invite:400,  rank:100, welcome:30 } },
-      malawi:  { name: "Malawi",  currency: "MWK", activation: 12000, payouts:{ youtube:2000, memes:2000, tiktok:2000, survey:2000, ads:2000, invite:6000, rank:1500, welcome:3000 } }
-    };
-
-    /* ---------- Country media from your links ---------- */
-    const COUNTRY_MEDIA = {
-      malawi:   [
-        "https://i.postimg.cc/tTcMMCBx/IMG-20250709-WA0014.jpg",
-        "https://i.postimg.cc/NMFnDrkt/IMG-20250709-WA0015.jpg"
-      ],
-      botswana: [
-        "https://i.postimg.cc/8cr0QQYn/IMG-20250711-WA0004.jpg",
-        "https://i.postimg.cc/t7Qm9vQR/IMG-20250711-WA0026.jpg"
-      ],
-      kenya:    [
-        "https://i.postimg.cc/wjYSzMg5/IMG-20250718-WA0026.jpg",
-        "https://i.postimg.cc/qqt9JCNw/IMG-20250819-WA0013.jpg"
-      ],
-      ghana:    [
-        "https://i.postimg.cc/QdgvdDd2/IMG-20250801-WA0025.jpg",
-        "https://i.postimg.cc/nL05q17T/IMG-20250816-WA0021.jpg"
-      ],
-      uganda:   [
-        "https://i.postimg.cc/D0tR8ysT/IMG-20250808-WA0018.jpg",
-        "https://i.postimg.cc/1z92gdgf/IMG-20250808-WA0019.jpg"
-      ]
-    };
-
-    /* ---------- Earning methods meta ---------- */
-    const METHODS = [
-      { key:"youtube", icon:"🎥", title:"Watch YouTube Videos",
-        desc:"Watch approved short videos and mark completion. Payouts post-verification." },
-      { key:"memes", icon:"😂", title:"Create & Post Memes",
-        desc:"Share verified memes. Approved posts earn payouts." },
-      { key:"tiktok", icon:"📱", title:"Watch TikTok Clips",
-        desc:"Short clips — watch, engage, confirm completion." },
-      { key:"survey", icon:"📝", title:"Answer Surveys",
-        desc:"Short multiple-choice surveys. Honest answers required." },
-      { key:"ads", icon:"📺", title:"Click/Interact Ads",
-        desc:"Follow sponsor instructions exactly to qualify." },
-      { key:"invite", icon:"👥", title:"Invite Friends (Referrals)",
-        desc:"Use your referral link. Bonus after they activate." },
-      { key:"rank", icon:"🏆", title:"Agent Ranking & Bonuses",
-        desc:"Hit milestones for rank bonuses." },
-      { key:"welcome", icon:"🎁", title:"Welcome Bonus",
-        desc:"One-time bonus credited after activation." }
-    ];
-
-    /* ---------- Utils & State ---------- */
-    const $  = (s, r=document) => r.querySelector(s);
-    const $all = (s, r=document) => Array.from(r.querySelectorAll(s));
-    const fmt = n => (typeof n === 'number') ? n.toLocaleString() : n;
-
-    let selectedCountry = null;
-
-    // highlight selection
-    document.addEventListener('DOMContentLoaded', () => {
-      $all('.country-card').forEach(card => {
-        card.addEventListener('click', () => {
-          selectedCountry = card.dataset.country;
-          $all('.country-card').forEach(c => c.classList.remove('ring-2','ring-indigo-500','bg-white','dark:bg-slate-600'));
-          card.classList.add('ring-2','ring-indigo-500','bg-white','dark:bg-slate-600');
-        });
-      });
-
-      // Continue button logic
-      $('#continueBtn').addEventListener('click', () => {
-        if(!selectedCountry){
-          alert('Please tap a country first');
-          return;
-        }
-        localStorage.setItem('trend_country', selectedCountry);
-        $('#countryModal').classList.add('hidden');
-        renderCountry(selectedCountry);
-      });
-
-      // Auto-open last selection
-      const saved = localStorage.getItem('trend_country');
-      if(saved && ECON[saved]){
-        selectedCountry = saved;
-        $('#countryModal').classList.add('hidden');
-        renderCountry(saved);
-      }
-    });
-
-    /* ---------- Render functions ---------- */
-    function renderCountry(key){
-      const info = ECON[key];
-      const media = COUNTRY_MEDIA[key] || [];
-      const content = $('#content');
-
-      // Header + activation
-      const headerHTML = `
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-softDark p-4 flex items-center justify-between">
-          <div>
-            <h1 class="text-2xl font-extrabold">TrendQash — ${info.name}</h1>
-            <p class="text-sm text-gray-500 dark:text-slate-400">Earn in ${info.currency}. Local payouts & calculators below.</p>
-          </div>
-          <div class="text-right">
-            <div class="text-xs text-gray-500 dark:text-slate-400">Activation fee</div>
-            <div class="font-semibold">${fmt(info.activation)} ${info.currency}</div>
-          </div>
-        </section>`;
-
-      // Image slider (scroll-snap)
-      const galleryHTML = `
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-softDark p-4">
-          <div class="flex items-center justify-between mb-2">
-            <h3 class="font-bold">Recent Proof & Updates — ${info.name}</h3>
-            <div class="text-xs text-gray-500 dark:text-slate-400">Swipe or use arrows</div>
-          </div>
-          <div class="relative">
-            <div id="gallery" class="flex gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory">
-              ${media.map(src => `<img src="${src}" alt="${info.name} update" class="h-44 sm:h-60 w-80 object-cover rounded-xl flex-none snap-start">`).join('')}
-            </div>
-            <button id="gPrev" class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-slate-700/80 hover:bg-white dark:hover:bg-slate-700 px-3 py-2 rounded-full shadow">‹</button>
-            <button id="gNext" class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-slate-700/80 hover:bg-white dark:hover:bg-slate-700 px-3 py-2 rounded-full shadow">›</button>
-          </div>
-        </section>`;
-
-      // Earnings container (cards rendered in JS)
-      const earnHTML = `<section id="earnHost" class="space-y-4"></section>`;
-
-      // Join + WhatsApp block — WhatsApp area wrapped in wa-canvas
-      const joinHTML = `
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-softDark p-4">
-          <h3 class="text-lg font-bold mb-2">How to Join — ${info.name}</h3>
-          <ol class="list-decimal pl-5 text-sm text-gray-600 dark:text-slate-300">
-            <li>Open the official register link (new tab).</li>
-            <li>Pay the activation fee: <strong>${fmt(info.activation)} ${info.currency}</strong>.</li>
-            <li>Complete profile, then start tasks & referrals.</li>
-          </ol>
-          <div class="mt-3 flex gap-2 flex-wrap">
-            <a id="joinBtn" class="btn bg-teal-600 text-white hover:bg-teal-700 rounded-full px-4 py-2" target="_blank" rel="noopener noreferrer">👉 Join Now</a>
-            <button id="joinCopy" class="btn border border-slate-200 dark:border-slate-600 rounded-full px-4 py-2">Copy Join Link</button>
-          </div>
-
-          <div class="mt-6 wa-canvas">
-            <h4 class="font-semibold mb-2">Contact Support via WhatsApp</h4>
-            <p class="text-sm mb-2">Type your message then press <em>Send to WhatsApp</em>. It opens WhatsApp with your message ready.</p>
-            <textarea id="waMsg" class="wa-input" placeholder="Type your message..."></textarea>
-            <div class="mt-3 flex gap-2 flex-wrap">
-              <button id="waSend" class="wa-btn">Send to WhatsApp</button>
-              <button id="waExample" class="wa-btn" style="background: rgba(255,255,255,0.15); color: #fff;">Use Example</button>
-            </div>
-            <p id="waHint" class="text-xs mt-2" style="color: rgba(255,255,255,0.95)"></p>
-          </div>
-        </section>`;
-
-      /* ----- FAQ (animated accordion) ----- */
-      const extrasHTML = `
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-softDark p-4">
-          <h4 class="font-bold mb-3">FAQ</h4>
-
-          <div class="space-y-3" id="faqHost">
-            ${faqItem("When are payouts processed?",
-              "Payouts are typically processed weekly after verification. Exact timing can vary based on campaign and country-specific payment rails.")}
-            ${faqItem("Which payment channels are supported?",
-              "Depends on your country: M-Pesa, MTN, Airtel Money, bank transfers or local partners. You can confirm in WhatsApp before activating.")}
-            ${faqItem("How do referrals work?",
-              "Share your unique link. When they activate successfully, your referral bonus is queued for payout.")}
-            ${faqItem("Is there a welcome bonus?",
-              "Yes. After activation, a one-time welcome bonus is credited instantly on eligible campaigns.")}
-          </div>
-        </section>
-
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-softDark p-4 text-center">
-          <h4 class="font-bold mb-2">Share TrendQash</h4>
-          <p class="text-sm text-gray-500 dark:text-slate-400 mb-3">Help your friends join — sharing increases referral chances.</p>
-          <div class="flex justify-center gap-2 flex-wrap">
-            <button id="shareWa" class="btn bg-green-600 hover:bg-green-700 text-white rounded-full px-4 py-2">Share via WhatsApp</button>
-            <button id="shareCopy" class="btn border border-slate-200 dark:border-slate-600 rounded-full px-4 py-2">Copy Link</button>
-          </div>
-        </section>`;
-
-      // Compose page
-      const html = headerHTML + galleryHTML + earnHTML + joinHTML + extrasHTML;
-      content.innerHTML = html;
-
-      // Wire gallery arrows
-      const gallery = $('#gallery');
-      if (gallery) {
-        $('#gPrev').addEventListener('click', ()=> gallery.scrollBy({left: -gallery.clientWidth, behavior:'smooth'}));
-        $('#gNext').addEventListener('click', ()=> gallery.scrollBy({left:  gallery.clientWidth, behavior:'smooth'}));
-      }
-
-      // Render earnings cards
-      renderEarnings(info);
-
-      // Join + share links
-      const joinUrl = 'https://www.trendqash.com/user/register.php?ref=Teranchamp';
-      $('#joinBtn').setAttribute('href', joinUrl);
-      $('#joinCopy').addEventListener('click', async ()=>{
-        try{ await navigator.clipboard.writeText(joinUrl); alert('Join link copied'); }
-        catch{ alert('Copy failed — URL: '+joinUrl); }
-      });
-
-      $('#shareWa').addEventListener('click', ()=>{
-        const text = `Join me on TrendQash (${info.name}). Register here: ${joinUrl}`;
-        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-      });
-      $('#shareCopy').addEventListener('click', async ()=>{
-        try{ await navigator.clipboard.writeText(joinUrl); alert('Link copied'); }
-        catch{ alert('Copy failed — URL: '+joinUrl); }
-      });
-
-      // WhatsApp compose defaults
-      const def = exampleWa(info);
-      const waMsgEl = $('#waMsg');
-      if (waMsgEl) {
-        waMsgEl.value = def;
-        $('#waHint').textContent = 'Example: ' + def;
-      }
-      $('#waExample').addEventListener('click', ()=> { $('#waMsg').value = def; $('#waMsg').focus(); });
-      $('#waSend').addEventListener('click', ()=>{
-        const raw = ($('#waMsg').value||'').trim();
-        if(!raw){ alert('Please type your message first.'); return; }
-        const phone = '254717028877';
-        const url = `https://wa.me/${phone}?text=${encodeURIComponent(raw)}`;
-        window.open(url, '_blank');
-      });
-
-      // Init FAQ accordion behavior after inject
-      initFAQ();
-    } // end renderCountry
-
-    /* ---- FAQ templating helper ---- */
-    function faqItem(q, a){
-      return `
-        <article class="faq-item bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700">
-          <button class="w-full flex items-center justify-between gap-3 px-4 py-3 text-left select-none">
-            <span class="font-semibold">${q}</span>
-            <svg class="faq-chevron w-5 h-5 text-slate-600 dark:text-slate-300" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.15l3.71-2.92a.75.75 0 111.06 1.06l-4.24 3.34a.75.75 0 01-.94 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/>
-            </svg>
-          </button>
-          <div class="faq-content px-4" data-answer>
-            <div class="py-0 pb-4 text-sm text-slate-600 dark:text-slate-300">${a}</div>
-          </div>
-        </article>`;
-    }
-
-    /* ---- FAQ behavior ---- */
-    function initFAQ(){
-      const items = $all('#faqHost .faq-item');
-      items.forEach(item => {
-        const btn = item.querySelector('button');
-        const content = item.querySelector('[data-answer]');
-        // set closed state
-        content.style.maxHeight = '0px';
-        btn.addEventListener('click', () => {
-          const isOpen = item.classList.contains('open');
-          // close all others (optional)
-          items.forEach(it => {
-            it.classList.remove('open');
-            const c = it.querySelector('[data-answer]');
-            c.style.maxHeight = '0px';
-          });
-          // open this
-          if(!isOpen){
-            item.classList.add('open');
-            content.style.maxHeight = content.scrollHeight + 'px';
-          }
-        });
-      });
-    }
-
-    /* ---- Earnings (bold gradients + dark variants) ---- */
-    function renderEarnings(info){
-      const host = $('#earnHost');
-
-      // Section header
-      const head = document.createElement('section');
-      head.className = 'bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-softDark p-4';
-      head.innerHTML = `<h3 class="text-lg font-bold">Ways of Earning — ${info.name}</h3><p class="text-sm text-gray-500 dark:text-slate-400">Each card has a quick calculator.</p>`;
-      host.appendChild(head);
-
-      // Grid
-      const grid = document.createElement('div');
-      grid.className = 'grid gap-4 sm:grid-cols-2';
-
-      // cycle through 6 bold canvases
-      const canvases = ['earn-canvas-1','earn-canvas-2','earn-canvas-3','earn-canvas-4','earn-canvas-5','earn-canvas-6'];
-
-      METHODS.forEach((m, i) => {
-        const rate = info.payouts[m.key];
-        const canvasClass = canvases[i % canvases.length];
-        const card = document.createElement('article');
-        card.className = `task-card ${canvasClass} rounded-xl p-3 text-slate-900 dark:text-slate-50`;
-        card.innerHTML = `
-          <div class="flex items-start justify-between gap-3">
-            <div class="flex items-start gap-3">
-              <div class="text-2xl">${m.icon}</div>
-              <div>
-                <div class="canvas-title">${m.title}</div>
-                <div class="text-sm canvas-desc">${m.desc}</div>
-              </div>
-            </div>
-            <div class="text-right">
-              <div class="font-extrabold canvas-title">${fmt(rate)} ${info.currency}${m.key==='invite'?' (max/day)':''}</div>
-              <div class="text-xs canvas-desc">per ${m.key==='invite'?'referral':'item'}</div>
-            </div>
-          </div>
-          ${ m.key==='welcome' ? `
-            <div class="text-sm canvas-desc mt-2">One-time reward: <strong>${fmt(rate)} ${info.currency}</strong></div>
-          ` : `
-            <div class="mt-3 flex items-center gap-2">
-              <input type="number" min="0" placeholder="${m.key==='invite'?'Enter invites':'Enter quantity'}" class="calc-input border border-white/60 dark:border-white/30 bg-white/90 dark:bg-white/90 rounded px-2 py-1 text-sm flex-1 text-slate-900" data-method="${m.key}">
-              <button class="calc-btn bg-white/95 text-gray-900 rounded-full px-3 py-1 text-sm font-bold shadow" data-method="${m.key}">Calculate</button>
-            </div>
-            <div class="mt-2 text-xs canvas-desc" data-result="${m.key}"></div>
-          `}
-        `;
-        grid.appendChild(card);
-      });
-
-      host.appendChild(grid);
-
-      // Instant calc as you type
-      grid.addEventListener('input', (e)=>{
-        const input = e.target.closest('.calc-input');
-        if(!input) return;
-        const method = input.dataset.method;
-        const qty = Number(input.value||0);
-        const rate = info.payouts[method]||0;
-        const out = grid.querySelector(`[data-result="${method}"]`);
-        if(qty<=0){ out.textContent=''; return; }
-        const total = qty*rate;
-        out.textContent = `${method==='invite'?'Estimated referral reward':'Estimated payout'}: ${fmt(total)} ${info.currency}.`;
-      });
-
-      // Button calc
-      grid.addEventListener('click', (e)=>{
-        const btn = e.target.closest('.calc-btn');
-        if(!btn) return;
-        const method = btn.dataset.method;
-        const input = grid.querySelector(`.calc-input[data-method="${method}"]`);
-        const qty = Number(input?.value||0);
-        const rate = info.payouts[method]||0;
-        const out = grid.querySelector(`[data-result="${method}"]`);
-        if(qty<=0){ out.textContent='Enter a quantity.'; return; }
-        const total = qty*rate;
-        out.textContent = `${method==='invite'?'Estimated referral reward':'Estimated payout'}: ${fmt(total)} ${info.currency}.`;
-      });
-
-      // Example table
-      const summary = document.createElement('section');
-      summary.className = 'bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-softDark p-4';
-      summary.innerHTML = `
-        <h4 class="font-bold mb-2">Example daily totals (illustrative)</h4>
-        <table class="w-full text-sm">
-          <thead><tr class="text-left text-gray-500 dark:text-slate-400"><th class="py-1">Example</th><th class="py-1">Daily</th></tr></thead>
-          <tbody class="text-slate-700 dark:text-slate-200">
-            <tr><td class="py-1">10 YouTube videos</td><td class="py-1">${fmt(info.payouts.youtube*10)} ${info.currency}</td></tr>
-            <tr><td class="py-1">10 TikTok clips</td><td class="py-1">${fmt(info.payouts.tiktok*10)} ${info.currency}</td></tr>
-            <tr><td class="py-1">5 Surveys</td><td class="py-1">${fmt(info.payouts.survey*5)} ${info.currency}</td></tr>
-            <tr><td class="py-1">Invite 2 active friends</td><td class="py-1">${fmt(info.payouts.invite*2)} ${info.currency}</td></tr>
-          </tbody>
-        </table>`;
-      host.appendChild(summary);
-    } // end renderEarnings
-
-    function exampleWa(info){
-      return `Hi TrendQash, I'm in ${info.name} and want to join. Activation fee is ${fmt(info.activation)} ${info.currency}. Please guide me and confirm payout methods for my country.`;
-    }
-
-    /* ======================== PART 1 END — CONTINUE IN PART 2 (below) ======================== */
-  </script>
-  <!-- Country Content -->
-  <section id="countryContent" class="space-y-12">
-
-    <!-- Country Slider -->
-    <div id="sliderSection" class="slider"></div>
-
-    <!-- Ways of Earning -->
-    <section class="max-w-5xl mx-auto">
-      <h2 class="text-3xl font-bold text-center text-indigo-400 mb-8">💡 Ways of Earning</h2>
-      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-
-        <!-- Card 1 -->
-        <div class="earning-gradient-1 p-6 rounded-2xl shadow-xl text-white">
-          <div class="text-3xl mb-3">👥</div>
-          <h3 class="text-xl font-bold mb-2">Referral Bonus</h3>
-          <p class="text-sm mb-3">Earn by inviting friends to join the platform. Each referral gives you instant rewards.</p>
-          <input type="number" id="referrals" placeholder="Number of Referrals" class="w-full p-2 rounded text-black mb-2">
-          <button onclick="calcReferrals()" class="bg-black bg-opacity-40 w-full py-2 rounded-lg">Calculate</button>
-          <p id="refResult" class="mt-2 font-semibold"></p>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="earning-gradient-2 p-6 rounded-2xl shadow-xl text-white">
-          <div class="text-3xl mb-3">📊</div>
-          <h3 class="text-xl font-bold mb-2">Survey Earnings</h3>
-          <p class="text-sm mb-3">Answer surveys daily and get paid for each submission. Easy and fun!</p>
-          <input type="number" id="surveys" placeholder="Surveys Completed" class="w-full p-2 rounded text-black mb-2">
-          <button onclick="calcSurveys()" class="bg-black bg-opacity-40 w-full py-2 rounded-lg">Calculate</button>
-          <p id="surveyResult" class="mt-2 font-semibold"></p>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="earning-gradient-3 p-6 rounded-2xl shadow-xl text-white">
-          <div class="text-3xl mb-3">📱</div>
-          <h3 class="text-xl font-bold mb-2">Social Media Tasks</h3>
-          <p class="text-sm mb-3">Get rewards for sharing posts, liking content, or engaging online.</p>
-          <input type="number" id="tasks" placeholder="Tasks Completed" class="w-full p-2 rounded text-black mb-2">
-          <button onclick="calcTasks()" class="bg-black bg-opacity-40 w-full py-2 rounded-lg">Calculate</button>
-          <p id="taskResult" class="mt-2 font-semibold"></p>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="earning-gradient-4 p-6 rounded-2xl shadow-xl text-white">
-          <div class="text-3xl mb-3">🎁</div>
-          <h3 class="text-xl font-bold mb-2">Daily Login Bonus</h3>
-          <p class="text-sm mb-3">Get paid simply by logging in every day. Consistency pays!</p>
-          <input type="number" id="days" placeholder="Days Logged In" class="w-full p-2 rounded text-black mb-2">
-          <button onclick="calcDaily()" class="bg-black bg-opacity-40 w-full py-2 rounded-lg">Calculate</button>
-          <p id="dailyResult" class="mt-2 font-semibold"></p>
-        </div>
-
+  <!-- Live members + CTA -->
+  <section class="max-w-7xl mx-auto px-4 pb-4">
+    <div class="glass p-4 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div class="hstack">
+        <div class="chip">Live this week</div>
+        <div>Members joined: <strong id="liveCount">0</strong></div>
       </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section class="max-w-3xl mx-auto">
-      <h2 class="text-3xl font-bold text-center text-indigo-400 mb-8">❓ Frequently Asked Questions</h2>
-      <div class="space-y-4" id="faqSection">
-
-        <div class="faq-item bg-gray-800 rounded-xl overflow-hidden shadow-md">
-          <button class="w-full flex justify-between items-center px-4 py-3 text-left font-semibold text-white hover:bg-gray-700 transition">
-            How do I join?
-            <span>➕</span>
-          </button>
-          <div class="faq-content hidden px-4 pb-4 text-gray-300">
-            Select your country, pay the activation fee, and start earning instantly.
-          </div>
-        </div>
-
-        <div class="faq-item bg-gray-800 rounded-xl overflow-hidden shadow-md">
-          <button class="w-full flex justify-between items-center px-4 py-3 text-left font-semibold text-white hover:bg-gray-700 transition">
-            How do I withdraw?
-            <span>➕</span>
-          </button>
-          <div class="faq-content hidden px-4 pb-4 text-gray-300">
-            Withdrawals are processed instantly via mobile money or bank depending on your country.
-          </div>
-        </div>
-
-        <div class="faq-item bg-gray-800 rounded-xl overflow-hidden shadow-md">
-          <button class="w-full flex justify-between items-center px-4 py-3 text-left font-semibold text-white hover:bg-gray-700 transition">
-            How can I earn?
-            <span>➕</span>
-          </button>
-          <div class="faq-content hidden px-4 pb-4 text-gray-300">
-            You can earn through referrals, surveys, daily logins, and social media tasks.
-          </div>
-        </div>
-
-        <div class="faq-item bg-gray-800 rounded-xl overflow-hidden shadow-md">
-          <button class="w-full flex justify-between items-center px-4 py-3 text-left font-semibold text-white hover:bg-gray-700 transition">
-            Is it legit?
-            <span>➕</span>
-          </button>
-          <div class="faq-content hidden px-4 pb-4 text-gray-300">
-            Yes ✅ TrendQash is trusted by thousands of members across Africa with instant payouts.
-          </div>
-        </div>
-
+      <div class="hstack">
+        <a id="registerTop" target="_blank" class="btn btn-dark heartbeat light-sweep" href="https://www.trendqash.com/user/register.php?ref=Teranchamp">🚀 How to Join & Register</a>
+        <button id="openPopupBtn" class="btn btn-outline">🇺🇳 Choose Country</button>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Chatbot Section -->
-    <section class="mt-16 max-w-2xl mx-auto bg-gray-800 rounded-2xl shadow-lg p-6">
-      <h2 class="text-2xl font-bold text-center text-indigo-400">🤖 TrendQash Assistant</h2>
-      <p class="text-center text-gray-400 mb-4">Ask me anything about joining, earning, or withdrawals!</p>
-
-      <!-- Chat window -->
-      <div id="chatContainer" class="h-72 overflow-y-auto bg-gray-900 rounded-lg p-4 space-y-3">
-        <div class="text-sm text-gray-400 text-center">Chat started. Type your question below 👇</div>
-      </div>
-
-      <!-- Input box -->
-      <div class="flex mt-4">
-        <input id="chatInput" type="text" class="flex-grow rounded-l-lg p-3 text-black" placeholder="Type your question..." />
-        <button onclick="sendChat()" class="bg-indigo-600 hover:bg-indigo-700 px-5 rounded-r-lg font-semibold">Send</button>
-      </div>
-
-      <!-- Quick Questions -->
-      <div class="flex flex-wrap gap-2 mt-4 justify-center">
-        <button onclick="quickAsk('How do I join?')" class="bg-gray-700 hover:bg-indigo-600 text-white px-4 py-2 rounded-full text-sm">How do I join?</button>
-        <button onclick="quickAsk('How do I withdraw?')" class="bg-gray-700 hover:bg-indigo-600 text-white px-4 py-2 rounded-full text-sm">How do I withdraw?</button>
-        <button onclick="quickAsk('How can I earn?')" class="bg-gray-700 hover:bg-indigo-600 text-white px-4 py-2 rounded-full text-sm">How can I earn?</button>
-        <button onclick="quickAsk('Is it legit?')" class="bg-gray-700 hover:bg-indigo-600 text-white px-4 py-2 rounded-full text-sm">Is it legit?</button>
-      </div>
-    </section>
-    <!-- WhatsApp Contact Box -->
-    <section class="mt-16 whatsapp-box text-white rounded-2xl p-6 max-w-xl mx-auto shadow-lg">
-      <h2 class="text-2xl font-bold mb-2">📩 Contact Us on WhatsApp</h2>
-      <p class="text-sm mb-4">Type your message below and press send:</p>
-      <textarea id="whatsappMessage" class="w-full p-3 rounded-lg text-black" rows="3" placeholder="Hello, I’m interested in joining TrendQash..."></textarea>
-      <button onclick="sendWhatsApp()" class="mt-3 w-full bg-green-600 hover:bg-green-700 font-semibold py-2 rounded-lg">
-        Send to WhatsApp
-      </button>
-    </section>
-
-    <!-- Footer -->
-    <footer class="text-center text-sm text-gray-500 py-6 mt-12">
-      © 2025 TrendQash. All rights reserved.
-    </footer>
+  <!-- Slide container (for smooth country switch) -->
+  <main class="max-w-7xl mx-auto px-4 pb-16 slide-container">
+    <div id="slideTrack" class="slide-track">
+      <!-- current -->
+      <section id="countryPaneCurrent" class="slide-pane">
+        <div id="countryContent" class="vstack"></div>
+      </section>
+      <!-- next (for animation) -->
+      <section id="countryPaneNext" class="slide-pane">
+        <div id="countryContentNext" class="vstack"></div>
+      </section>
+    </div>
   </main>
 
-  <!-- ================= JS Section ================= -->
+  <!-- Footer -->
+  <footer class="max-w-7xl mx-auto px-4 pb-10">
+    <div class="text-center muted text-xs">
+      © <span id="year"></span> TrendQash Agencies • Localized earnings portal
+    </div>
+  </footer>
   <script>
-    let selectedCountry = null;
+  // ------------- Constants & Data -------------
+  const SUPPORT_WA = "+254717028877";
+  const LIVE_START = 420;
+  const RATES = {
+    KES: 0.0076,   // -> USD
+    GHS: 0.083,
+    BWP: 0.074,
+    MWK: 0.00059,
+    UGX: 0.00027
+  };
 
-    // Country selector modal
-    window.onload = () => {
-      document.getElementById("countryModal").style.display = "flex";
-    };
+  // Country configs with per-method payouts
+  // Methods: youtube, memes, tiktok, surveys, netflix, referrals, agent, welcome, ebooks, forex
+  const COUNTRIES = {
+    kenya: {
+      key:"kenya", flag:"🇰🇪", name:"Kenya", currency:"KES",
+      activationFee: 550, rateToUSD: RATES.KES,
+      payments:["M-Pesa"],
+      note:"Activation is handled in the registration flow. Do not send money to WhatsApp — it's for support only.",
+      methods: {
+        youtube: 50, memes: 50, tiktok: 50, surveys: 50, netflix: 50,
+        referrals: 300, agent: 500, welcome: 150, ebooks: 40, forex: 0
+      },
+      testimonials:[
+        {quote:"I earned KES 9,600 combining referrals & videos.", name:"Abigail W.", city:"Nairobi"},
+        {quote:"Quick payouts and helpful support.", name:"Peter O.", city:"Nakuru"}
+      ]
+    },
+    ghana: {
+      key:"ghana", flag:"🇬🇭", name:"Ghana", currency:"GHS",
+      activationFee: 80, rateToUSD: RATES.GHS,
+      payments:["MTN MoMo","AirtelTigo Money","Vodafone Cash"],
+      note:"Activation shown on the platform page. WhatsApp is support only.",
+      methods: {
+        youtube: 12, memes: 10, tiktok: 12, surveys: 10, netflix: 12,
+        referrals: 20, agent: 8, welcome: 5, ebooks: 2, forex: 0
+      },
+      testimonials:[
+        {quote:"MoMo cashouts hit fast!", name:"Kofi A.", city:"Accra"},
+        {quote:"Clear instructions; easy side cash.", name:"Efua B.", city:"Kumasi"}
+      ]
+    },
+    botswana: {
+      key:"botswana", flag:"🇧🇼", name:"Botswana", currency:"BWP",
+      activationFee: 100, rateToUSD: RATES.BWP,
+      payments:["Orange Money","Mascom MyZaka"],
+      note:"Follow registration instructions for activation. Support on WhatsApp only.",
+      methods: {
+        youtube: 18, memes: 16, tiktok: 18, surveys: 20, netflix: 18,
+        referrals: 25, agent: 10, welcome: 6, ebooks: 3, forex: 0
+      },
+      testimonials:[
+        {quote:"I cash out every week.", name:"Peter K.", city:"Gaborone"}
+      ]
+    },
+    malawi: {
+      key:"malawi", flag:"🇲🇼", name:"Malawi", currency:"MWK",
+      activationFee: 12000, rateToUSD: RATES.MWK,
+      payments:["Airtel Money","TNM Mpamba"],
+      note:"Activation recipient is shown in-registration. WhatsApp is for support only.",
+      methods: {
+        youtube: 1800, memes: 1500, tiktok: 1800, surveys: 2000, netflix: 1800,
+        referrals: 3000, agent: 1200, welcome: 800, ebooks: 300, forex: 0
+      },
+      testimonials:[
+        {quote:"Mpamba withdrawals are smooth.", name:"Grace T.", city:"Lilongwe"}
+      ]
+    },
+    uganda: {
+      key:"uganda", flag:"🇺🇬", name:"Uganda", currency:"UGX",
+      activationFee: 20000, rateToUSD: RATES.UGX,
+      payments:["MTN MoMo","Airtel Money"],
+      note:"Activation details appear on the platform registration page. Support on WhatsApp.",
+      methods: {
+        youtube: 3500, memes: 3000, tiktok: 3500, surveys: 4000, netflix: 3500,
+        referrals: 7000, agent: 5000, welcome: 2500, ebooks: 1200, forex: 0
+      },
+      testimonials:[
+        {quote:"Surveys covered my transport costs.", name:"Sarah N.", city:"Kampala"}
+      ]
+    }
+  };
 
-    // Select country
-    document.querySelectorAll(".country-card").forEach(card => {
-      card.addEventListener("click", () => {
-        document.querySelectorAll(".country-card").forEach(c => c.classList.remove("ring-2", "ring-indigo-600"));
-        card.classList.add("ring-2", "ring-indigo-600");
-        selectedCountry = card.getAttribute("data-country");
-      });
-    });
+  // ----- Helpers -----
+  const $ = (s, r=document)=> r.querySelector(s);
+  const $$ = (s, r=document)=> Array.from(r.querySelectorAll(s));
+  const fmt = (n)=> Number(n||0).toLocaleString();
+  const escapeHtml = (s)=> String(s).replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-    // Continue button
-    document.getElementById("continueBtn").addEventListener("click", () => {
-      if (!selectedCountry) {
-        alert("Please select your country first.");
-        return;
-      }
-      document.getElementById("countryModal").style.display = "none";
-      renderCountry(selectedCountry);
-    });
+  // ----- Live counter -----
+  let liveCounter = LIVE_START;
+  function tickLiveCounter(){
+    liveCounter += Math.floor(Math.random()*3);
+    const el = $("#liveCount");
+    if(el) el.textContent = fmt(liveCounter);
+  }
 
-    // Render country-specific content
-    function renderCountry(country) {
-      const slider = document.getElementById("sliderSection");
-      let images = [];
-
-      switch (country) {
-        case "Malawi": images = [
-          "https://i.postimg.cc/tTcMMCBx/IMG-20250709-WA0014.jpg",
-          "https://i.postimg.cc/NMFnDrkt/IMG-20250709-WA0015.jpg"
-        ]; break;
-        case "Botswana": images = [
-          "https://i.postimg.cc/8cr0QQYn/IMG-20250711-WA0004.jpg",
-          "https://i.postimg.cc/t7Qm9vQR/IMG-20250711-WA0026.jpg"
-        ]; break;
-        case "Kenya": images = [
-          "https://i.postimg.cc/wjYSzMg5/IMG-20250718-WA0026.jpg",
-          "https://i.postimg.cc/qqt9JCNw/IMG-20250819-WA0013.jpg"
-        ]; break;
-        case "Ghana": images = [
-          "https://i.postimg.cc/QdgvdDd2/IMG-20250801-WA0025.jpg",
-          "https://i.postimg.cc/nL05q17T/IMG-20250816-WA0021.jpg"
-        ]; break;
-        case "Uganda": images = [
-          "https://i.postimg.cc/D0tR8ysT/IMG-20250808-WA0018.jpg",
-          "https://i.postimg.cc/1z92gdgf/IMG-20250808-WA0019.jpg"
-        ]; break;
-      }
-
-      slider.innerHTML = images.map(img => `
-        <div class="slide">
-          <img src="${img}" alt="${country}" class="rounded-xl shadow-lg"/>
+  // ---------- Builders ----------
+  function buildHero(cfg){
+    const el = document.createElement("section");
+    el.className = "glass canva-a p-5 rounded-2xl vstack";
+    el.innerHTML = `
+      <div class="flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold">${cfg.flag} ${cfg.name} — Start Earning Today</h2>
+          <p class="text-sm muted mt-1">Activation: <strong>${cfg.currency} ${fmt(cfg.activationFee)}</strong> • Payments: ${cfg.payments.join(", ")}</p>
         </div>
-      `).join("");
+        <div class="hstack">
+          <a class="btn btn-dark heartbeat light-sweep" href="https://www.trendqash.com/user/register.php?ref=Teranchamp" target="_blank">Register Now</a>
+          <button class="btn btn-outline" id="scrollToHow">How it works</button>
+        </div>
+      </div>
+      <div class="text-xs muted">Note: ${cfg.note}</div>
+    `;
+    el.querySelector("#scrollToHow").addEventListener("click", ()=> {
+      const t = document.getElementById("howToJoin");
+      if(t) t.scrollIntoView({behavior:"smooth", block:"start"});
+    });
+    return el;
+  }
+
+  function buildBusiness(cfg){
+    const el = document.createElement("section");
+    el.className = "glass p-5 rounded-2xl grid-3";
+    el.innerHTML = `
+      <div class="card canva-b p-4">
+        <div class="text-xs muted">Activation Fee</div>
+        <div class="text-xl font-bold">${cfg.currency} ${fmt(cfg.activationFee)}</div>
+      </div>
+      <div class="card p-4">
+        <div class="text-xs muted">Payment Methods</div>
+        <div class="font-semibold">${cfg.payments.join(", ")}</div>
+      </div>
+      <div class="card p-4">
+        <div class="text-xs muted">Support</div>
+        <div>WhatsApp: <strong>${SUPPORT_WA}</strong> (support only)</div>
+      </div>
+    `;
+    return el;
+  }
+
+  // Earning method card
+  function buildMethodCard(cfg, id, label, icon, desc){
+    const rate = cfg.methods[id] ?? 0;
+    const el = document.createElement("div");
+    el.className = "card glass p-0 overflow-hidden";
+    const cardId = `${cfg.key}_${id}`;
+
+    el.innerHTML = `
+      <div class="card-header canva-c p-4 flex items-start justify-between">
+        <div class="flex items-start gap-3">
+          <div class="text-2xl">${icon}</div>
+          <div>
+            <div class="text-lg font-bold">${label}</div>
+            <div class="text-sm muted">${desc}</div>
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="text-xs muted">Pays</div>
+          <div class="font-bold">${cfg.currency} ${fmt(rate)}</div>
+        </div>
+      </div>
+
+      <div class="card-body p-4">
+        <div class="text-sm leading-relaxed mb-3" id="${cardId}_detail"></div>
+        <div class="grid-2">
+          <div>
+            <label class="text-sm">Quantity</label>
+            <input id="${cardId}_qty" type="number" min="0" class="input mt-1" placeholder="e.g. 10"/>
+          </div>
+          <div>
+            <label class="text-sm">Result</label>
+            <div id="${cardId}_out" class="input mt-1 bg-transparent"></div>
+          </div>
+        </div>
+        <div class="hstack mt-3">
+          <button class="btn btn-dark" data-calc="${id}">Calculate</button>
+          <button class="btn btn-ghost" data-clear="${id}">Clear</button>
+        </div>
+      </div>
+    `;
+
+    // Fill detailed explanation
+    const detail = `
+      ${detailTextFor(id, cfg)}
+      <div class="mt-2 text-xs muted">Auto-convert: ${cfg.currency} → USD at ~${cfg.rateToUSD} / unit currency.</div>
+    `;
+    el.querySelector(`#${cardId}_detail`).innerHTML = detail;
+
+    // Toggle open/close
+    const header = el.querySelector(".card-header");
+    header.addEventListener("click", ()=>{
+      el.classList.toggle("open");
+    });
+
+    // Buttons
+    el.querySelector("[data-calc]").addEventListener("click", ()=>{
+      const qty = Number((document.getElementById(`${cardId}_qty`).value || 0));
+      let payout = rate * qty;
+      // special cases
+      if(id==="welcome"){ payout = rate; }
+      const usd = payout * cfg.rateToUSD;
+      document.getElementById(`${cardId}_out`).textContent = `${cfg.currency} ${fmt(payout)} (~$${usd.toFixed(2)})`;
+    });
+    el.querySelector("[data-clear]").addEventListener("click", ()=>{
+      const q = document.getElementById(`${cardId}_qty`);
+      const o = document.getElementById(`${cardId}_out`);
+      if(q) q.value = "";
+      if(o) o.textContent = "";
+    });
+
+    return el;
+  }
+
+  function detailTextFor(id, cfg){
+    const c = cfg.currency;
+    const r = (k)=> cfg.methods[k] ?? 0;
+    switch(id){
+      case "youtube":
+        return `Watch promoted YouTube videos (2–5 minutes each) and confirm completion. Example: 10 videos/day × ${c} ${fmt(r("youtube"))} = ${c} ${fmt(10*r("youtube"))}. Tip: do them in batches morning/evening.`;
+      case "memes":
+        return `View or help categorize memes for engagement tests. Each approved meme pays ${c} ${fmt(r("memes"))}. Keep content appropriate; low-quality entries may be rejected.`;
+      case "tiktok":
+        return `Watch TikTok clips and confirm. Short-form tasks with quick turnover. Example: 20 clips = ${c} ${fmt(20*r("tiktok"))}.`;
+      case "surveys":
+        return `Answer short local surveys (1–3 minutes). Honest answers only. ${c} ${fmt(r("surveys"))} each.`;
+      case "netflix":
+        return `Click/preview Netflix-style promos and record feedback. ${c} ${fmt(r("netflix"))} per ad.`;
+      case "referrals":
+        return `Invite friends. Each direct referral pays ${c} ${fmt(r("referrals"))}. Example: 5 invites/day = ${c} ${fmt(5*r("referrals"))}.`;
+      case "agent":
+        return `Agent ranking tasks: verify simple steps for new members. ${c} ${fmt(r("agent"))} per verification.`;
+      case "welcome":
+        return `One-time welcome bonus of ${c} ${fmt(r("welcome"))} after activation. Enter "1" as quantity to simulate (or leave blank; calculator will show fixed reward).`;
+      case "ebooks":
+        return `Get access to eBooks & entertainment perks. This is a periodic benefit valued at ~${c} ${fmt(r("ebooks"))}.`;
+      case "forex":
+        return `Learn basics of Forex with beginner materials. This is an educational perk; not a paid task.`;
+      default:
+        return `Task details coming soon.`;
+    }
+  }
+
+  function buildWaysGrid(cfg){
+    const el = document.createElement("section");
+    el.className = "glass p-5 rounded-2xl";
+    el.innerHTML = `<h3 class="text-xl font-extrabold mb-3">Ways to Earn — Interactive</h3>`;
+    const grid = document.createElement("div");
+    grid.className = "grid-2";
+
+    const methods = [
+      ["youtube","YouTube Videos","🎥","Watch longer videos & confirm."],
+      ["memes","Memes","🎉","Engagement testing with memes."],
+      ["tiktok","TikTok Videos","🎵","Short clip viewing & confirm."],
+      ["surveys","Surveys","📝","Answer quick local surveys."],
+      ["netflix","Netflix Ads","🎬","Preview & give feedback."],
+      ["referrals","Referrals","🤝","Invite friends to earn."],
+      ["agent","Agent Ranking","🏆","Verify steps for new members."],
+      ["welcome","Welcome Bonus","🎁","One-time bonus after activation."],
+      ["ebooks","eBooks/Benefits","📚","Entertainment/library perks."],
+      ["forex","Learn Forex","📈","Educational materials for basics."]
+    ];
+
+    methods.forEach(([id, label, icon, brief], i)=>{
+      const card = buildMethodCard(cfg, id, label, icon, brief);
+      // Alternate subtle canva backgrounds
+      if(i%3===0) card.classList.add("canva-a"); else if(i%3===1) card.classList.add("canva-b"); else card.classList.add("canva-c");
+      grid.appendChild(card);
+    });
+
+    el.appendChild(grid);
+    return el;
+  }
+
+  function buildTable(cfg){
+    const el = document.createElement("section");
+    el.className = "glass p-5 rounded-2xl";
+    const rows = [
+      ["YouTube", cfg.methods.youtube],
+      ["Memes", cfg.methods.memes],
+      ["TikTok", cfg.methods.tiktok],
+      ["Surveys", cfg.methods.surveys],
+      ["Netflix Ads", cfg.methods.netflix],
+      ["Referrals (each)", cfg.methods.referrals],
+      ["Agent Ranking", cfg.methods.agent],
+      ["Welcome Bonus", cfg.methods.welcome],
+      ["eBooks/Benefits", cfg.methods.ebooks]
+    ].map(([k,v])=>`<tr><td class="p-3">${k}</td><td class="p-3 font-semibold">${cfg.currency} ${fmt(v)}</td></tr>`).join("");
+
+    el.innerHTML = `
+      <h3 class="text-xl font-extrabold mb-3">Payout Table — ${cfg.flag} ${cfg.name}</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead><tr class="border-b border-slate-700/40">
+            <th class="p-3">Method</th><th class="p-3">Reward</th>
+          </tr></thead>
+          <tbody class="text-sm">${rows}</tbody>
+        </table>
+      </div>
+    `;
+    return el;
+  }
+
+  function buildFAQ(cfg){
+    const data = [
+      ["How do I register?","Open the registration link and follow the steps. Activation fee: "+cfg.currency+" "+fmt(cfg.activationFee)+"."],
+      ["How do I withdraw?","Withdrawals are processed weekly via your chosen local method."],
+      ["Is this legit?","Yes — TrendQash is registered and pays out weekly. See testimonials."],
+      ["Support?","WhatsApp "+SUPPORT_WA+" (support only; do not send payments)."]
+    ];
+    const el = document.createElement("section");
+    el.className = "glass p-5 rounded-2xl";
+    el.innerHTML = `<h3 class="text-xl font-extrabold mb-3">Frequently Asked Questions</h3>
+      <div id="${cfg.key}_faq" class="vstack"></div>`;
+    const host = el.querySelector(`#${cfg.key}_faq`);
+    data.forEach(([q,a],i)=>{
+      const item = document.createElement("div");
+      item.className = "card";
+      item.innerHTML = `
+        <button class="w-full text-left p-3 flex items-center justify-between card-header"><span class="font-semibold">${q}</span><span>+</span></button>
+        <div class="card-body p-3 text-sm muted">${a}</div>`;
+      item.querySelector(".card-header").addEventListener("click", ()=> item.classList.toggle("open"));
+      host.appendChild(item);
+    });
+    return el;
+  }
+
+  function buildHowToJoin(cfg){
+    const el = document.createElement("section");
+    el.id = "howToJoin";
+    el.className = "glass p-5 rounded-2xl canva-b";
+    el.innerHTML = `
+      <h3 class="text-xl font-extrabold mb-3">How to Join — ${cfg.flag} ${cfg.name}</h3>
+      <ol class="list-decimal pl-5 space-y-2 text-sm">
+        <li>Tap <strong>Register</strong> and create your account.</li>
+        <li>Pay the <strong>activation fee</strong>: ${cfg.currency} ${fmt(cfg.activationFee)} (shown within the platform).</li>
+        <li>Open the <strong>Tasks</strong> page and start completing methods you like.</li>
+        <li>Withdraw weekly to your local method: ${cfg.payments.join(", ")}.</li>
+      </ol>
+      <div class="hstack mt-4">
+        <a class="btn btn-dark heartbeat light-sweep" target="_blank" href="https://www.trendqash.com/user/register.php?ref=Teranchamp">🚀 Register Now</a>
+        <button id="${cfg.key}_share2" class="btn btn-outline">🔗 Share this to a friend</button>
+      </div>
+    `;
+    // share (secondary)
+    setTimeout(()=>{
+      const b = document.getElementById(`${cfg.key}_share2`);
+      if(b) b.addEventListener("click", shareSite);
+    },0);
+    return el;
+  }
+
+  function buildChatAndWhatsApp(cfg){
+    const el = document.createElement("section");
+    el.className = "glass p-5 rounded-2xl";
+    el.innerHTML = `
+      <h3 class="text-xl font-extrabold mb-3">Support — Chat & WhatsApp</h3>
+      <div class="grid-2">
+        <div class="card p-0 overflow-hidden">
+          <div class="p-3 border-b border-slate-700/40 font-semibold">Chatbot</div>
+          <div id="${cfg.key}_messages" class="h-56 overflow-y-auto p-3 text-sm space-y-2 bg-black/10"></div>
+          <div class="p-3 hstack">
+            <input id="${cfg.key}_chat_in" class="input flex-1" placeholder="Ask about registration, withdrawals, earnings..."/>
+            <button class="btn btn-dark" data-send>Send</button>
+          </div>
+          <div class="p-3 hstack text-xs muted">
+            <button class="chip" data-quick="register">How to register?</button>
+            <button class="chip" data-quick="withdraw">How to withdraw?</button>
+            <button class="chip" data-quick="earn">Ways to earn</button>
+          </div>
+        </div>
+
+        <div class="card p-0 overflow-hidden">
+          <div class="p-3 border-b border-slate-700/40 font-semibold">WhatsApp Support</div>
+          <div class="p-3">
+            <label class="text-sm">Compose message</label>
+            <textarea id="${cfg.key}_wa_msg" rows="5" class="input mt-1">Hi, I'm interested in TrendQash ${cfg.name}. My name is [Your Name]. My number: [Your Number]. Please guide me on registration and payouts.</textarea>
+            <div class="hstack mt-3">
+              <button class="btn btn-primary heartbeat light-sweep" data-open-wa>Open WhatsApp</button>
+              <button class="btn btn-ghost" data-fill-example>Use Example</button>
+            </div>
+            <p class="text-xs muted mt-2">Note: WhatsApp <strong>${SUPPORT_WA}</strong> is support-only — do not send payments there.</p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Init chatbot welcome
+    const box = el.querySelector(`#${cfg.key}_messages`);
+    if(box){
+      box.insertAdjacentHTML("beforeend",
+        `<div class="p-2 rounded bg-white/5">👋 Hi! I can help with <em>registration</em>, <em>withdrawals</em>, and <em>earnings</em>. Try the quick buttons below, or type a question.</div>`);
     }
 
-    // ================= Calculators =================
-    function calcReferrals() {
-      const n = parseInt(document.getElementById("referrals").value) || 0;
-      document.getElementById("refResult").innerText = "You’ll earn: $" + (n * 2);
-    }
-    function calcSurveys() {
-      const n = parseInt(document.getElementById("surveys").value) || 0;
-      document.getElementById("surveyResult").innerText = "You’ll earn: $" + (n * 1.5);
-    }
-    function calcTasks() {
-      const n = parseInt(document.getElementById("tasks").value) || 0;
-      document.getElementById("taskResult").innerText = "You’ll earn: $" + (n * 1);
-    }
-    function calcDaily() {
-      const n = parseInt(document.getElementById("days").value) || 0;
-      document.getElementById("dailyResult").innerText = "You’ll earn: $" + (n * 0.5);
-    }
-
-    // ================= FAQ Animation =================
-    document.querySelectorAll(".faq-item button").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const content = btn.nextElementSibling;
-        const open = !content.classList.contains("hidden");
-        document.querySelectorAll(".faq-content").forEach(c => c.classList.add("hidden"));
-        if (!open) content.classList.remove("hidden");
+    // Chat events
+    el.querySelector("[data-send]").addEventListener("click", ()=> sendChat(cfg.key));
+    el.querySelectorAll("[data-quick]").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        const t = b.getAttribute("data-quick");
+        const input = document.getElementById(`${cfg.key}_chat_in`);
+        if(!input) return;
+        input.value = (t==="register"?"How to register?": t==="withdraw"?"How to withdraw?":"What are the ways to earn?");
+        sendChat(cfg.key);
       });
     });
 
-    // ================= Chatbot =================
-    const chatContainer = document.getElementById("chatContainer");
+    // WhatsApp events
+    el.querySelector("[data-open-wa]").addEventListener("click", ()=> openWhatsApp(cfg.key));
+    el.querySelector("[data-fill-example]").addEventListener("click", ()=> copyExample(cfg.key));
 
-    function sendChat() {
-      const input = document.getElementById("chatInput");
-      const text = input.value.trim();
-      if (!text) return;
+    return el;
+  }
 
-      addMessage("You", text);
-      input.value = "";
+  function buildTestimonials(cfg){
+    const el = document.createElement("section");
+    el.className = "glass p-5 rounded-2xl";
+    const slides = (cfg.testimonials||[]).map(t=>`
+      <div class="min-w-full p-4">
+        <p class="italic">“${t.quote}”</p>
+        <div class="mt-2 text-sm muted">— ${t.name}, ${t.city}</div>
+      </div>`).join("");
+    el.innerHTML = `
+      <h3 class="text-xl font-extrabold mb-3">Member Testimonials — ${cfg.flag} ${cfg.name}</h3>
+      <div class="relative overflow-hidden rounded-lg">
+        <div id="${cfg.key}_ttrack" class="flex transition-transform duration-700">${slides}</div>
+        <button class="absolute left-3 top-1/2 -translate-y-1/2 btn btn-ghost" data-ts-prev>‹</button>
+        <button class="absolute right-3 top-1/2 -translate-y-1/2 btn btn-ghost" data-ts-next>›</button>
+        <div id="${cfg.key}_tdots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2"></div>
+      </div>`;
+    // init
+    setTimeout(()=> initTestimonialAuto(cfg.key, cfg), 0);
+    return el;
+  }
+  // ---------- Rendering ----------
+  let selectedCountry = "kenya"; // default
+  function renderCountryPage(key, host){
+    const cfg = COUNTRIES[key];
+    host.innerHTML = "";
+    host.appendChild(buildHero(cfg));
+    host.appendChild(buildBusiness(cfg));
+    host.appendChild(buildWaysGrid(cfg));
+    host.appendChild(buildTable(cfg));
+    host.appendChild(buildFAQ(cfg));
+    host.appendChild(buildHowToJoin(cfg));
+    host.appendChild(buildChatAndWhatsApp(cfg));
+    host.appendChild(buildTestimonials(cfg));
+  }
 
-      setTimeout(() => {
-        let reply = "🤖 Sorry, I don’t understand.";
-        if (/join/i.test(text)) reply = "👉 To join, select your country, pay activation fee, and start earning instantly.";
-        if (/withdraw/i.test(text)) reply = "💳 Withdrawals are instant via mobile money or bank depending on your country.";
-        if (/earn/i.test(text)) reply = "💡 You can earn through referrals, surveys, social tasks, and daily bonuses.";
-        if (/legit/i.test(text)) reply = "✅ Yes! TrendQash is trusted with instant payouts across Africa.";
+  // ---------- Testimonials carousel ----------
+  const TestState = {};
+  function initTestimonialAuto(key, cfg){
+    const track = document.getElementById(`${key}_ttrack`);
+    const dots = document.getElementById(`${key}_tdots`);
+    if(!track || !dots) return;
+    const count = (cfg.testimonials||[]).length || 1;
+    dots.innerHTML = "";
+    for(let i=0;i<count;i++){
+      const d=document.createElement("div");
+      d.className="w-2.5 h-2.5 rounded-full bg-white/30"+(i===0?" ring-2 ring-white":"");
+      d.dataset.i=i; d.onclick=()=>{ TestState[key].idx=i; sync(); };
+      dots.appendChild(d);
+    }
+    TestState[key] = { idx:0, count };
+    function sync(){
+      track.style.transform = `translateX(-${TestState[key].idx*100}%)`;
+      Array.from(dots.children).forEach((el,i)=> {
+        el.classList.toggle("ring-2", i===TestState[key].idx);
+        el.classList.toggle("ring-white", i===TestState[key].idx);
+      });
+    }
+    TestState[key].timer = setInterval(()=>{ TestState[key].idx = (TestState[key].idx+1)%count; sync(); }, 4200);
+    const prevBtn = track.parentElement.querySelector("[data-ts-prev]");
+    const nextBtn = track.parentElement.querySelector("[data-ts-next]");
+    prevBtn.addEventListener("click", ()=>{ TestState[key].idx = (TestState[key].idx-1+count)%count; sync(); });
+    nextBtn.addEventListener("click", ()=>{ TestState[key].idx = (TestState[key].idx+1)%count; sync(); });
+  }
 
-        addMessage("Bot", reply);
-      }, 800);
+  // ---------- Chatbot ----------
+  function sendChat(countryKey){
+    const inEl = document.getElementById(`${countryKey}_chat_in`);
+    const box = document.getElementById(`${countryKey}_messages`);
+    const txt = (inEl?.value||"").trim();
+    if(!txt) return;
+    // user bubble
+    box.insertAdjacentHTML("beforeend", `<div class="flex justify-end"><div class="px-3 py-2 rounded bg-sky-600 text-white">${escapeHtml(txt)}</div></div>`);
+    inEl.value=""; box.scrollTop = box.scrollHeight;
+
+    const cfg = COUNTRIES[countryKey];
+    const lc = txt.toLowerCase();
+    let reply = `Hi — ask about registration, withdrawals, or ways to earn.`;
+
+    if(lc.includes("register") || lc.includes("join")){
+      reply = `To register: open the link, create your account, and pay the activation fee of ${cfg.currency} ${fmt(cfg.activationFee)}. Then start tasks.`;
+    } else if(lc.includes("withdraw")){
+      reply = `Withdrawals are processed weekly to: ${cfg.payments.join(", ")}. Check your dashboard for steps.`;
+    } else if(lc.includes("earn") || lc.includes("payout") || lc.includes("pay")){
+      const m = cfg.methods;
+      reply = `Top payouts per task: YouTube ${cfg.currency} ${fmt(m.youtube)}, TikTok ${fmt(m.tiktok)}, Surveys ${fmt(m.surveys)}, Referrals ${fmt(m.referrals)} each. Use the calculators inside each card.`;
+    } else if(lc.includes("referral")){
+      reply = `Invite friends with your link. Each direct referral pays ${cfg.currency} ${fmt(cfg.methods.referrals)}.`;
     }
 
-    function addMessage(sender, msg) {
-      const bubble = document.createElement("div");
-      bubble.className = sender === "You" ? "text-right" : "text-left";
-      bubble.innerHTML = `<div class="inline-block px-4 py-2 rounded-xl ${sender === "You" ? "bg-indigo-600 text-white" : "bg-gray-700 text-gray-200"}">${msg}</div>`;
-      chatContainer.appendChild(bubble);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
+    setTimeout(()=>{
+      box.insertAdjacentHTML("beforeend", `<div class="mt-2"><div class="px-3 py-2 rounded bg-white/5">${reply}</div></div>`);
+      box.scrollTop = box.scrollHeight;
+    }, 300);
+  }
 
-    function quickAsk(question) {
-      document.getElementById("chatInput").value = question;
-      sendChat();
-    }
+  // ---------- WhatsApp ----------
+  function openWhatsApp(countryKey){
+    const ta = document.getElementById(`${countryKey}_wa_msg`);
+    const msg = (ta?.value||"").trim();
+    if(!msg) return alert("Type a message first.");
+    const phone = SUPPORT_WA.replace(/\+| /g,"");
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
+  }
+  function copyExample(countryKey){
+    const ta = document.getElementById(`${countryKey}_wa_msg`);
+    if(ta) ta.value = `Hi, I'm interested in TrendQash ${COUNTRIES[countryKey].name}. My name is [Your Name]. My number: [Your Number]. Please guide me on registration and payouts.`;
+  }
 
-    // ================= WhatsApp =================
-    function sendWhatsApp() {
-      const msg = document.getElementById("whatsappMessage").value.trim();
-      if (!msg) {
-        alert("Please type a message first.");
-        return;
+  // ---------- Share ----------
+  async function shareSite(){
+    const shareData = {
+      title: "TrendQash Agencies — Earn from local tasks",
+      text: "Try TrendQash: watch videos, memes, surveys, referrals — localized payouts & weekly withdrawals.",
+      url: location.href
+    };
+    try{
+      if(navigator.share){ await navigator.share(shareData); }
+      else{
+        await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
+        alert("Link copied! Share it with your friends.");
       }
-      const phone = "254700000000"; // Replace with your WhatsApp number
-      const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
-      window.open(url, "_blank");
+    }catch(e){ /* user canceled */ }
+  }
+
+  // ---------- Country Popup ----------
+  const popup = document.getElementById("countryPopup");
+  const selectEl = document.getElementById("countrySelect");
+  document.getElementById("openPopupBtn").addEventListener("click", ()=> popup.classList.add("show"));
+  document.getElementById("switchCountryBtn").addEventListener("click", ()=> popup.classList.add("show"));
+  document.getElementById("cancelCountryBtn").addEventListener("click", ()=> popup.classList.remove("show"));
+  document.getElementById("chooseCountryBtn").addEventListener("click", ()=>{
+    const val = selectEl.value;
+    if(!val || !COUNTRIES[val]) return alert("Please select a country.");
+    popup.classList.remove("show");
+    setCountry(val, true);
+  });
+
+  // ---------- Slide switch ----------
+  const track = document.getElementById("slideTrack");
+  function setCountry(key, animate=false){
+    if(!COUNTRIES[key]) return;
+    localStorage.setItem("selectedCountry", key);
+    selectedCountry = key;
+
+    const nextHost = document.getElementById("countryContentNext");
+    renderCountryPage(key, nextHost);
+
+    if(animate){
+      // slide in next
+      track.style.transform = "translateX(-50%)";
+      // after transition, swap panes
+      track.addEventListener("transitionend", onDone, { once:true });
+      function onDone(){
+        const curHost = document.getElementById("countryContent");
+        curHost.innerHTML = nextHost.innerHTML;
+        nextHost.innerHTML = "";
+        track.style.transition = "none";
+        track.style.transform = "translateX(0)";
+        // force reflow then restore transition
+        track.offsetHeight; // reflow
+        track.style.transition = "transform .45s ease";
+        updateHeaderForCountry();
+      }
+    }else{
+      const curHost = document.getElementById("countryContent");
+      renderCountryPage(key, curHost);
+      updateHeaderForCountry();
     }
+  }
+  function updateHeaderForCountry(){
+    const cfg = COUNTRIES[selectedCountry];
+    const regTop = document.getElementById("registerTop");
+    if(regTop) regTop.textContent = `🚀 Join ${cfg.name} — ${cfg.currency} ${fmt(cfg.activationFee)}`;
+  }
+
+  // ---------- Init ----------
+  (function init(){
+    document.getElementById("year").textContent = new Date().getFullYear();
+    document.getElementById("shareBtn").addEventListener("click", shareSite);
+    setInterval(tickLiveCounter, 4500); tickLiveCounter();
+
+    // restore saved country
+    const saved = localStorage.getItem("selectedCountry");
+    const initial = (saved && COUNTRIES[saved]) ? saved : "kenya";
+    // preselect in popup
+    const sel = document.getElementById("countrySelect");
+    if(sel) sel.value = initial;
+
+    renderCountryPage(initial, document.getElementById("countryContent"));
+    updateHeaderForCountry();
+  })();
   </script>
 </body>
 </html>
