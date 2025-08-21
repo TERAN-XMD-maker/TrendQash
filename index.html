@@ -916,6 +916,167 @@
       const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
       window.open(url, "_blank");
     }
-  </script>
+<!-- ========================= MULTI-BOT SYSTEM (Coachable + Motivational + Modern Background) ========================= -->
+
+<!-- Floating Bot Menu -->
+<div class="fixed bottom-6 right-6 space-y-2 z-50">
+  <button onclick="toggleBot('onboarding')" class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg animate-bounce">🎉</button>
+  <button onclick="toggleBot('motivational')" class="bg-green-600 hover:bg-green-700 text-white p-3 rounded-full shadow-lg animate-pulse">💡</button>
+  <button onclick="toggleBot('training')" class="bg-purple-600 hover:bg-purple-700 text-white p-3 rounded-full shadow-lg">📚</button>
+  <button onclick="toggleBot('support')" class="bg-red-600 hover:bg-red-700 text-white p-3 rounded-full shadow-lg">🆘</button>
+</div>
+
+<!-- Generic Bot Window -->
+<div id="botWindow" class="hidden fixed bottom-20 right-6 rounded-2xl shadow-xl w-80 flex-col overflow-hidden">
+  <!-- Animated Gradient Background -->
+  <div id="botHeader" class="p-3 font-bold text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 animate-gradient-x"></div>
+  <div id="botContent" class="p-3 h-64 overflow-y-auto text-sm bg-gradient-to-br from-white via-gray-100 to-gray-200 dark:from-slate-900 dark:via-slate-800 dark:to-slate-700"></div>
+  <div class="flex border-t">
+    <input id="botInput" class="flex-1 p-2 text-sm dark:bg-slate-700" placeholder="(Use buttons below)" disabled>
+    <button class="px-3 text-gray-400 font-bold cursor-not-allowed">➤</button>
+  </div>
+</div>
+
+<style>
+/* Smooth gradient animation */
+@keyframes gradient-x {
+  0%, 100% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
+}
+.animate-gradient-x {
+  background-size: 200% 200%;
+  animation: gradient-x 6s ease infinite;
+}
+</style>
+
+<script>
+let activeBot = null;
+
+const bots = {
+  onboarding: {
+    name: "🎉 Onboarding Bot",
+    color: "from-blue-600 via-indigo-500 to-blue-400",
+    start: () => {
+      addBotMsg("👋 Welcome to TrendQash! Let me guide you step by step.");
+      addBotMsg("👉 Do you already have an account?<br><button onclick='onboardingChoice(true)' class='bg-green-500 px-2 py-1 rounded text-white'>✅ Yes</button> <button onclick='onboardingChoice(false)' class='bg-red-500 px-2 py-1 rounded text-white'>❌ No</button>");
+    }
+  },
+  motivational: {
+    name: "💡 Motivational Bot",
+    color: "from-green-600 via-emerald-500 to-lime-400",
+    start: () => {
+      addBotMsg("🌟 How are you feeling today?<br><button onclick='motivationChoice(\"low\")' class='bg-yellow-500 text-white px-2 py-1 rounded'>😞 Discouraged</button> <button onclick='motivationChoice(\"ok\")' class='bg-blue-500 text-white px-2 py-1 rounded'>🙂 Okay</button> <button onclick='motivationChoice(\"high\")' class='bg-pink-500 text-white px-2 py-1 rounded'>🔥 Super Motivated</button>");
+    }
+  },
+  training: {
+    name: "📚 Training Bot",
+    color: "from-purple-600 via-violet-500 to-pink-500",
+    start: () => {
+      showLessonMenu();
+    }
+  },
+  support: {
+    name: "🆘 Support Bot",
+    color: "from-red-600 via-pink-500 to-orange-400",
+    start: () => {
+      addBotMsg("Hi 👋 I can help with issues. Choose one:<br><button onclick='supportChoice(1)' class='bg-gray-200 px-2 py-1 rounded'>💸 Payout delay</button><br><button onclick='supportChoice(2)' class='bg-gray-200 px-2 py-1 rounded'>🔐 Account issue</button><br><button onclick='supportChoice(3)' class='bg-gray-200 px-2 py-1 rounded'>💳 Activation help</button>");
+    }
+  }
+};
+
+function toggleBot(botKey){
+  activeBot = botKey;
+  const bot = bots[botKey];
+
+  const window = document.getElementById("botWindow");
+  window.classList.remove("hidden");
+
+  // Gradient header background
+  document.getElementById("botHeader").className = "p-3 font-bold text-white bg-gradient-to-r " + bot.color + " animate-gradient-x";
+  document.getElementById("botHeader").innerText = bot.name;
+
+  const content = document.getElementById("botContent");
+  content.innerHTML = "";
+
+  bot.start();
+}
+
+function addBotMsg(msg){
+  const content = document.getElementById("botContent");
+  content.innerHTML += `<div class="mb-2 text-indigo-700 dark:text-gray-100"><b>${bots[activeBot].name}:</b> ${msg}</div>`;
+  content.scrollTop = content.scrollHeight;
+}
+
+// ================== Onboarding Logic ==================
+function onboardingChoice(hasAccount){
+  if(hasAccount){
+    addBotMsg("✅ Great! Please log in and check your dashboard.");
+  } else {
+    addBotMsg("🆕 No worries! Let me explain.");
+    addBotMsg("❓ Why do we pay a registration fee?<br><button onclick='explainFee()' class='bg-indigo-500 text-white px-2 py-1 rounded'>💡 Explain</button>");
+  }
+}
+
+function explainFee(){
+  addBotMsg("💼 You can’t start a business without some capital. The registration fee is your small startup cost.");
+  addBotMsg("📶 Just like you can’t Google without bundles, you can’t start earning without activation.");
+  addBotMsg("⚡ This fee helps keep the platform running & ensures serious members only.");
+  addBotMsg("👉 Ready to create your account now?<br><button onclick='addBotMsg(\"🚀 Awesome! Click Sign Up to begin.\")' class='bg-green-600 text-white px-2 py-1 rounded'>Yes, Sign Me Up</button>");
+}
+
+// ================== Training Lessons ==================
+function showLessonMenu(){
+  addBotMsg("📚 Choose a lesson to start: <br> <button onclick='showLesson(1)' class='bg-indigo-500 text-white px-2 py-1 rounded'>Lesson 1</button> <button onclick='showLesson(2)' class='bg-indigo-500 text-white px-2 py-1 rounded'>Lesson 2</button> <button onclick='showLesson(3)' class='bg-indigo-500 text-white px-2 py-1 rounded'>Lesson 3</button>");
+}
+
+function showLesson(num){
+  if(num === 1){
+    addBotMsg("📖 Lesson 1: Complete your profile for trust & higher payouts.");
+    addBotMsg("❓ Have you completed your profile yet?<br><button onclick='lessonAnswer(1,true)' class='bg-green-500 px-2 py-1 rounded text-white'>✅ Yes</button> <button onclick='lessonAnswer(1,false)' class='bg-red-500 px-2 py-1 rounded text-white'>❌ No</button>");
+    addBotMsg("<button onclick='showLessonMenu()' class='bg-gray-400 text-white px-2 py-1 rounded'>⬅️ Back to Lessons</button>");
+  }
+  if(num === 2){
+    addBotMsg("🎯 Lesson 2: Share your referral link on WhatsApp, TikTok & Facebook groups.");
+    addBotMsg("<button onclick='showLessonMenu()' class='bg-gray-400 text-white px-2 py-1 rounded'>⬅️ Back to Lessons</button>");
+  }
+  if(num === 3){
+    addBotMsg("💰 Lesson 3: Always check surveys daily to maximize your earnings.");
+    addBotMsg("<button onclick='showLessonMenu()' class='bg-gray-400 text-white px-2 py-1 rounded'>⬅️ Back to Lessons</button>");
+  }
+}
+
+function lessonAnswer(lesson, ans){
+  if(lesson === 1){
+    if(ans){
+      addBotMsg("👍 Awesome! You’re on the right track.");
+    } else {
+      addBotMsg("⚠️ Please complete your profile first to unlock surveys & earnings.");
+    }
+  }
+}
+
+// ================== Motivational Bot Logic ==================
+function motivationChoice(state){
+  if(state === "low"){
+    addBotMsg("💡 Don’t give up! Every success story started with struggles. Keep pushing 💪");
+    addBotMsg("🔥 Remember: even 1 small step forward is still progress.");
+  }
+  if(state === "ok"){
+    addBotMsg("✨ You’re doing fine! But greatness comes when you push a little harder 🚀");
+    addBotMsg("👉 Try setting a small daily target like 1 referral or 2 surveys.");
+  }
+  if(state === "high"){
+    addBotMsg("🔥🔥 That’s the spirit! Keep the fire burning and inspire others too!");
+    addBotMsg("🏆 Success loves consistency — stay focused!");
+  }
+}
+
+// ================== Support Options ==================
+function supportChoice(option){
+  if(option === 1) addBotMsg("✅ Your payout is being processed. It usually takes 2-3 days.");
+  if(option === 2) addBotMsg("🔐 For account issues, reset your password or contact admin.");
+  if(option === 3) addBotMsg("💳 Activation help: Pay the activation fee via the dashboard instructions.");
+}
+</script>
 </body>
 </html>
