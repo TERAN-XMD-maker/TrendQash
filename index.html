@@ -1,4 +1,3 @@
-<!-- ========================== TrendQash Portal — DARK THEME + BOLD CANVAS + MODERN FAQ ========================== -->
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
@@ -7,7 +6,6 @@
   <title>TrendQash Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
-    // Tailwind config: enable class-based dark mode
     tailwind.config = {
       darkMode: 'class',
       theme: {
@@ -21,7 +19,6 @@
     }
   </script>
   <style>
-    /* Moving trust banner */
     .marquee {
       overflow: hidden;
       position: relative;
@@ -40,7 +37,6 @@
     }
     .country-card:hover { transform: scale(1.05); transition: 0.3s; }
 
-    /* ===== Bold Canvas Gradients (Light) ===== */
     .earn-canvas-1 { 
       background-image:
         radial-gradient(60% 60% at 15% 10%, rgba(255,255,255,0.30), transparent 40%),
@@ -71,8 +67,6 @@
         radial-gradient(60% 60% at 80% 20%, rgba(255,255,255,0.22), transparent 40%),
         linear-gradient(135deg, #00C6FF 0%, #0072FF 100%);
     }
-
-    /* ===== Bold Canvas Gradients (Dark variants) ===== */
     .dark .earn-canvas-1 { 
       background-image:
         radial-gradient(50% 50% at 20% 20%, rgba(255,255,255,0.06), transparent 40%),
@@ -103,21 +97,16 @@
         radial-gradient(50% 50% at 76% 24%, rgba(255,255,255,0.06), transparent 40%),
         linear-gradient(135deg, #0369A1 0%, #1D4ED8 100%);
     }
-
     .task-card {
       border-radius: 14px;
       padding: 14px;
       box-shadow: var(--card-shadow, 0 10px 26px rgba(2,6,23,.08));
     }
     .dark .task-card { --card-shadow: 0 10px 26px rgba(0,0,0,.45); }
-
-    /* Readable text on bold canvases */
     .canvas-title { color: #0b1324; font-weight: 800; letter-spacing: .1px; }
     .canvas-desc  { color: rgba(11,19,36,0.85); }
     .dark .canvas-title { color: #F8FAFC; }
     .dark .canvas-desc  { color: rgba(248,250,252,0.85); }
-
-    /* WhatsApp compose canvas (light & dark aware) */
     .wa-canvas {
       background-image:
         radial-gradient(circle at 10% 10%, rgba(255,255,255,0.05), transparent 8%),
@@ -157,11 +146,7 @@
       cursor: pointer;
       box-shadow: 0 6px 16px rgba(2,6,23,0.10);
     }
-
-    /* Gallery tweaks */
     #gallery img { border-radius: 12px; object-fit: cover; }
-
-    /* FAQ (animated accordion) */
     .faq-item {
       border-radius: 12px;
       overflow: hidden;
@@ -184,15 +169,11 @@
     .faq-item.open .faq-chevron {
       transform: rotate(180deg);
     }
-
-    /* Small screens */
     @media (max-width:640px){
       .earn-canvas-1, .earn-canvas-2, .earn-canvas-3, .earn-canvas-4, .earn-canvas-5, .earn-canvas-6 { padding:12px; }
     }
   </style>
 </head>
-
-<!-- Dark mode is toggled by adding/removing the "dark" class on <html> -->
 <body class="bg-gray-100 dark:bg-slate-900 min-h-screen flex flex-col text-slate-800 dark:text-slate-100">
 
   <!-- Trust Caption -->
@@ -200,18 +181,20 @@
     <p>Trusted by thousands across Africa 🌍 | Instant Payouts 💸 | Join today and start earning 🚀</p>
   </div>
 
-  <!-- Top bar with theme toggle -->
+  <!-- Top bar with theme toggle and Switch Country -->
   <header class="sticky top-0 z-40 bg-white/70 dark:bg-slate-900/70 backdrop-blur border-b border-slate-200 dark:border-slate-800">
     <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <span class="text-xl font-extrabold tracking-wide">TrendQash</span>
         <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-600 text-white dark:bg-indigo-500">Portal</span>
       </div>
-
       <div class="flex items-center gap-2">
         <button id="themeToggle" class="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-sm hover:bg-slate-50 dark:hover:bg-slate-800">
           <span class="inline dark:hidden">🌙 Dark</span>
           <span class="hidden dark:inline">☀️ Light</span>
+        </button>
+        <button id="switchCountryBtn" class="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 text-sm ml-2 hover:bg-slate-50 dark:hover:bg-slate-800">
+          🌍 Switch Country
         </button>
       </div>
     </div>
@@ -251,7 +234,7 @@
 
   <!-- ================= DATA + JS ================= -->
   <script>
-    /* ---------- Theme: load + toggle ---------- */
+    /* ---------- Theme: load + toggle + switch country ---------- */
     (function initTheme(){
       const root = document.documentElement;
       const stored = localStorage.getItem('tq_theme');
@@ -262,381 +245,20 @@
         root.classList.toggle('dark');
         localStorage.setItem('tq_theme', root.classList.contains('dark') ? 'dark' : 'light');
       });
-    })();
-
-    /* ---------- Config: currencies, activation, payouts ---------- */
-    const ECON = {
-      kenya:   { name: "Kenya",   currency: "KES", activation: 550,   payouts:{ youtube:50, memes:50, tiktok:50, survey:50, ads:50, invite:3000, rank:500, welcome:150 } },
-      uganda:  { name: "Uganda",  currency: "UGX", activation: 20000, payouts:{ youtube:1500, memes:1500, tiktok:1500, survey:1500, ads:1500, invite:20000, rank:4000, welcome:5000 } },
-      ghana:   { name: "Ghana",   currency: "GHC", activation: 80,    payouts:{ youtube:20, memes:20, tiktok:20, survey:20, ads:20, invite:200,  rank:50,  welcome:20 } },
-      botswana:{ name: "Botswana",currency: "BWP", activation: 100,   payouts:{ youtube:40, memes:40, tiktok:40, survey:40, ads:40, invite:400,  rank:100, welcome:30 } },
-      malawi:  { name: "Malawi",  currency: "MWK", activation: 12000, payouts:{ youtube:2000, memes:2000, tiktok:2000, survey:2000, ads:2000, invite:6000, rank:1500, welcome:3000 } }
-    };
-
-    /* ---------- Country media from your links ---------- */
-    const COUNTRY_MEDIA = {
-      malawi:   [
-        "https://i.postimg.cc/tTcMMCBx/IMG-20250709-WA0014.jpg",
-        "https://i.postimg.cc/NMFnDrkt/IMG-20250709-WA0015.jpg"
-      ],
-      botswana: [
-        "https://i.postimg.cc/8cr0QQYn/IMG-20250711-WA0004.jpg",
-        "https://i.postimg.cc/t7Qm9vQR/IMG-20250711-WA0026.jpg"
-      ],
-      kenya:    [
-        "https://i.postimg.cc/wjYSzMg5/IMG-20250718-WA0026.jpg",
-        "https://i.postimg.cc/qqt9JCNw/IMG-20250819-WA0013.jpg"
-      ],
-      ghana:    [
-        "https://i.postimg.cc/QdgvdDd2/IMG-20250801-WA0025.jpg",
-        "https://i.postimg.cc/nL05q17T/IMG-20250816-WA0021.jpg"
-      ],
-      uganda:   [
-        "https://i.postimg.cc/D0tR8ysT/IMG-20250808-WA0018.jpg",
-        "https://i.postimg.cc/1z92gdgf/IMG-20250808-WA0019.jpg"
-      ]
-    };
-
-    /* ---------- Earning methods meta ---------- */
-    const METHODS = [
-      { key:"youtube", icon:"🎥", title:"Watch YouTube Videos",
-        desc:"Watch approved short videos and mark completion. Payouts post-verification." },
-      { key:"memes", icon:"😂", title:"Create & Post Memes",
-        desc:"Share verified memes. Approved posts earn payouts." },
-      { key:"tiktok", icon:"📱", title:"Watch TikTok Clips",
-        desc:"Short clips — watch, engage, confirm completion." },
-      { key:"survey", icon:"📝", title:"Answer Surveys",
-        desc:"Short multiple-choice surveys. Honest answers required." },
-      { key:"ads", icon:"📺", title:"Click/Interact Ads",
-        desc:"Follow sponsor instructions exactly to qualify." },
-      { key:"invite", icon:"👥", title:"Invite Friends (Referrals)",
-        desc:"Use your referral link. Bonus after they activate." },
-      { key:"rank", icon:"🏆", title:"Agent Ranking & Bonuses",
-        desc:"Hit milestones for rank bonuses." },
-      { key:"welcome", icon:"🎁", title:"Welcome Bonus",
-        desc:"One-time bonus credited after activation." }
-    ];
-
-    /* ---------- Utils & State ---------- */
-    const $  = (s, r=document) => r.querySelector(s);
-    const $all = (s, r=document) => Array.from(r.querySelectorAll(s));
-    const fmt = n => (typeof n === 'number') ? n.toLocaleString() : n;
-
-    let selectedCountry = null;
-
-    // highlight selection
-    document.addEventListener('DOMContentLoaded', () => {
-      $all('.country-card').forEach(card => {
-        card.addEventListener('click', () => {
-          selectedCountry = card.dataset.country;
-          $all('.country-card').forEach(c => c.classList.remove('ring-2','ring-indigo-500','bg-white','dark:bg-slate-600'));
-          card.classList.add('ring-2','ring-indigo-500','bg-white','dark:bg-slate-600');
-        });
-      });
-
-      // Continue button logic
-      $('#continueBtn').addEventListener('click', () => {
-        if(!selectedCountry){
-          alert('Please tap a country first');
-          return;
-        }
-        localStorage.setItem('trend_country', selectedCountry);
-        $('#countryModal').classList.add('hidden');
-        renderCountry(selectedCountry);
-      });
-
-      // Auto-open last selection
-      const saved = localStorage.getItem('trend_country');
-      if(saved && ECON[saved]){
-        selectedCountry = saved;
-        $('#countryModal').classList.add('hidden');
-        renderCountry(saved);
-      }
-    });
-
-    /* ---------- Render functions ---------- */
-    function renderCountry(key){
-      const info = ECON[key];
-      const media = COUNTRY_MEDIA[key] || [];
-      const content = $('#content');
-
-      // Header + activation
-      const headerHTML = `
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-softDark p-4 flex items-center justify-between">
-          <div>
-            <h1 class="text-2xl font-extrabold">TrendQash — ${info.name}</h1>
-            <p class="text-sm text-gray-500 dark:text-slate-400">Earn in ${info.currency}. Local payouts & calculators below.</p>
-          </div>
-          <div class="text-right">
-            <div class="text-xs text-gray-500 dark:text-slate-400">Activation fee</div>
-            <div class="font-semibold">${fmt(info.activation)} ${info.currency}</div>
-          </div>
-        </section>`;
-
-      // Image slider (scroll-snap)
-      const galleryHTML = `
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-softDark p-4">
-          <div class="flex items-center justify-between mb-2">
-            <h3 class="font-bold">Recent Proof & Updates — ${info.name}</h3>
-            <div class="text-xs text-gray-500 dark:text-slate-400">Swipe or use arrows</div>
-          </div>
-          <div class="relative">
-            <div id="gallery" class="flex gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory">
-              ${media.map(src => `<img src="${src}" alt="${info.name} update" class="h-44 sm:h-60 w-80 object-cover rounded-xl flex-none snap-start">`).join('')}
-            </div>
-            <button id="gPrev" class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-slate-700/80 hover:bg-white dark:hover:bg-slate-700 px-3 py-2 rounded-full shadow">‹</button>
-            <button id="gNext" class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 dark:bg-slate-700/80 hover:bg-white dark:hover:bg-slate-700 px-3 py-2 rounded-full shadow">›</button>
-          </div>
-        </section>`;
-
-      // Earnings container (cards rendered in JS)
-      const earnHTML = `<section id="earnHost" class="space-y-4"></section>`;
-
-      // Join + WhatsApp block — WhatsApp area wrapped in wa-canvas
-      const joinHTML = `
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-softDark p-4">
-          <h3 class="text-lg font-bold mb-2">How to Join — ${info.name}</h3>
-          <ol class="list-decimal pl-5 text-sm text-gray-600 dark:text-slate-300">
-            <li>Open the official register link (new tab).</li>
-            <li>Pay the activation fee: <strong>${fmt(info.activation)} ${info.currency}</strong>.</li>
-            <li>Complete profile, then start tasks & referrals.</li>
-          </ol>
-          <div class="mt-3 flex gap-2 flex-wrap">
-            <a id="joinBtn" class="btn bg-teal-600 text-white hover:bg-teal-700 rounded-full px-4 py-2" target="_blank" rel="noopener noreferrer">👉 Join Now</a>
-            <button id="joinCopy" class="btn border border-slate-200 dark:border-slate-600 rounded-full px-4 py-2">Copy Join Link</button>
-          </div>
-
-          <div class="mt-6 wa-canvas">
-            <h4 class="font-semibold mb-2">Contact Support via WhatsApp</h4>
-            <p class="text-sm mb-2">Type your message then press <em>Send to WhatsApp</em>. It opens WhatsApp with your message ready.</p>
-            <textarea id="waMsg" class="wa-input" placeholder="Type your message..."></textarea>
-            <div class="mt-3 flex gap-2 flex-wrap">
-              <button id="waSend" class="wa-btn">Send to WhatsApp</button>
-              <button id="waExample" class="wa-btn" style="background: rgba(255,255,255,0.15); color: #fff;">Use Example</button>
-            </div>
-            <p id="waHint" class="text-xs mt-2" style="color: rgba(255,255,255,0.95)"></p>
-          </div>
-        </section>`;
-
-      /* ----- FAQ (animated accordion) ----- */
-      const extrasHTML = `
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-softDark p-4">
-          <h4 class="font-bold mb-3">FAQ</h4>
-
-          <div class="space-y-3" id="faqHost">
-            ${faqItem("When are payouts processed?",
-              "Payouts are typically processed weekly after verification. Exact timing can vary based on campaign and country-specific payment rails.")}
-            ${faqItem("Which payment channels are supported?",
-              "Depends on your country: M-Pesa, MTN, Airtel Money, bank transfers or local partners. You can confirm in WhatsApp before activating.")}
-            ${faqItem("How do referrals work?",
-              "Share your unique link. When they activate successfully, your referral bonus is queued for payout.")}
-            ${faqItem("Is there a welcome bonus?",
-              "Yes. After activation, a one-time welcome bonus is credited instantly on eligible campaigns.")}
-          </div>
-        </section>
-
-        <section class="bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-softDark p-4 text-center">
-          <h4 class="font-bold mb-2">Share TrendQash</h4>
-          <p class="text-sm text-gray-500 dark:text-slate-400 mb-3">Help your friends join — sharing increases referral chances.</p>
-          <div class="flex justify-center gap-2 flex-wrap">
-            <button id="shareWa" class="btn bg-green-600 hover:bg-green-700 text-white rounded-full px-4 py-2">Share via WhatsApp</button>
-            <button id="shareCopy" class="btn border border-slate-200 dark:border-slate-600 rounded-full px-4 py-2">Copy Link</button>
-          </div>
-        </section>`;
-
-      // Compose page
-      const html = headerHTML + galleryHTML + earnHTML + joinHTML + extrasHTML;
-      content.innerHTML = html;
-
-      // Wire gallery arrows
-      const gallery = $('#gallery');
-      if (gallery) {
-        $('#gPrev').addEventListener('click', ()=> gallery.scrollBy({left: -gallery.clientWidth, behavior:'smooth'}));
-        $('#gNext').addEventListener('click', ()=> gallery.scrollBy({left:  gallery.clientWidth, behavior:'smooth'}));
-      }
-
-      // Render earnings cards
-      renderEarnings(info);
-
-      // Join + share links
-      const joinUrl = 'https://www.trendqash.com/user/register.php?ref=Teranchamp';
-      $('#joinBtn').setAttribute('href', joinUrl);
-      $('#joinCopy').addEventListener('click', async ()=>{
-        try{ await navigator.clipboard.writeText(joinUrl); alert('Join link copied'); }
-        catch{ alert('Copy failed — URL: '+joinUrl); }
-      });
-
-      $('#shareWa').addEventListener('click', ()=>{
-        const text = `Join me on TrendQash (${info.name}). Register here: ${joinUrl}`;
-        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-      });
-      $('#shareCopy').addEventListener('click', async ()=>{
-        try{ await navigator.clipboard.writeText(joinUrl); alert('Link copied'); }
-        catch{ alert('Copy failed — URL: '+joinUrl); }
-      });
-
-      // WhatsApp compose defaults
-      const def = exampleWa(info);
-      const waMsgEl = $('#waMsg');
-      if (waMsgEl) {
-        waMsgEl.value = def;
-        $('#waHint').textContent = 'Example: ' + def;
-      }
-      $('#waExample').addEventListener('click', ()=> { $('#waMsg').value = def; $('#waMsg').focus(); });
-      $('#waSend').addEventListener('click', ()=>{
-        const raw = ($('#waMsg').value||'').trim();
-        if(!raw){ alert('Please type your message first.'); return; }
-        const phone = '254717028877';
-        const url = `https://wa.me/${phone}?text=${encodeURIComponent(raw)}`;
-        window.open(url, '_blank');
-      });
-
-      // Init FAQ accordion behavior after inject
-      initFAQ();
-    } // end renderCountry
-
-    /* ---- FAQ templating helper ---- */
-    function faqItem(q, a){
-      return `
-        <article class="faq-item bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700">
-          <button class="w-full flex items-center justify-between gap-3 px-4 py-3 text-left select-none">
-            <span class="font-semibold">${q}</span>
-            <svg class="faq-chevron w-5 h-5 text-slate-600 dark:text-slate-300" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.15l3.71-2.92a.75.75 0 111.06 1.06l-4.24 3.34a.75.75 0 01-.94 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/>
-            </svg>
-          </button>
-          <div class="faq-content px-4" data-answer>
-            <div class="py-0 pb-4 text-sm text-slate-600 dark:text-slate-300">${a}</div>
-          </div>
-        </article>`;
-    }
-
-    /* ---- FAQ behavior ---- */
-    function initFAQ(){
-      const items = $all('#faqHost .faq-item');
-      items.forEach(item => {
-        const btn = item.querySelector('button');
-        const content = item.querySelector('[data-answer]');
-        // set closed state
-        content.style.maxHeight = '0px';
-        btn.addEventListener('click', () => {
-          const isOpen = item.classList.contains('open');
-          // close all others (optional)
-          items.forEach(it => {
-            it.classList.remove('open');
-            const c = it.querySelector('[data-answer]');
-            c.style.maxHeight = '0px';
-          });
-          // open this
-          if(!isOpen){
-            item.classList.add('open');
-            content.style.maxHeight = content.scrollHeight + 'px';
+      // Switch Country button
+      const switchBtn = document.getElementById('switchCountryBtn');
+      if (switchBtn) {
+        switchBtn.addEventListener('click', () => {
+          localStorage.removeItem('trend_country');
+          const modal = document.getElementById('countryModal');
+          if (modal) {
+            modal.style.display = 'flex';
+            modal.classList.remove('hidden');
           }
         });
-      });
-    }
-
-    /* ---- Earnings (bold gradients + dark variants) ---- */
-    function renderEarnings(info){
-      const host = $('#earnHost');
-
-      // Section header
-      const head = document.createElement('section');
-      head.className = 'bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-softDark p-4';
-      head.innerHTML = `<h3 class="text-lg font-bold">Ways of Earning — ${info.name}</h3><p class="text-sm text-gray-500 dark:text-slate-400">Each card has a quick calculator.</p>`;
-      host.appendChild(head);
-
-      // Grid
-      const grid = document.createElement('div');
-      grid.className = 'grid gap-4 sm:grid-cols-2';
-
-      // cycle through 6 bold canvases
-      const canvases = ['earn-canvas-1','earn-canvas-2','earn-canvas-3','earn-canvas-4','earn-canvas-5','earn-canvas-6'];
-
-      METHODS.forEach((m, i) => {
-        const rate = info.payouts[m.key];
-        const canvasClass = canvases[i % canvases.length];
-        const card = document.createElement('article');
-        card.className = `task-card ${canvasClass} rounded-xl p-3 text-slate-900 dark:text-slate-50`;
-        card.innerHTML = `
-          <div class="flex items-start justify-between gap-3">
-            <div class="flex items-start gap-3">
-              <div class="text-2xl">${m.icon}</div>
-              <div>
-                <div class="canvas-title">${m.title}</div>
-                <div class="text-sm canvas-desc">${m.desc}</div>
-              </div>
-            </div>
-            <div class="text-right">
-              <div class="font-extrabold canvas-title">${fmt(rate)} ${info.currency}${m.key==='invite'?' (max/day)':''}</div>
-              <div class="text-xs canvas-desc">per ${m.key==='invite'?'referral':'item'}</div>
-            </div>
-          </div>
-          ${ m.key==='welcome' ? `
-            <div class="text-sm canvas-desc mt-2">One-time reward: <strong>${fmt(rate)} ${info.currency}</strong></div>
-          ` : `
-            <div class="mt-3 flex items-center gap-2">
-              <input type="number" min="0" placeholder="${m.key==='invite'?'Enter invites':'Enter quantity'}" class="calc-input border border-white/60 dark:border-white/30 bg-white/90 dark:bg-white/90 rounded px-2 py-1 text-sm flex-1 text-slate-900" data-method="${m.key}">
-              <button class="calc-btn bg-white/95 text-gray-900 rounded-full px-3 py-1 text-sm font-bold shadow" data-method="${m.key}">Calculate</button>
-            </div>
-            <div class="mt-2 text-xs canvas-desc" data-result="${m.key}"></div>
-          `}
-        `;
-        grid.appendChild(card);
-      });
-
-      host.appendChild(grid);
-
-      // Instant calc as you type
-      grid.addEventListener('input', (e)=>{
-        const input = e.target.closest('.calc-input');
-        if(!input) return;
-        const method = input.dataset.method;
-        const qty = Number(input.value||0);
-        const rate = info.payouts[method]||0;
-        const out = grid.querySelector(`[data-result="${method}"]`);
-        if(qty<=0){ out.textContent=''; return; }
-        const total = qty*rate;
-        out.textContent = `${method==='invite'?'Estimated referral reward':'Estimated payout'}: ${fmt(total)} ${info.currency}.`;
-      });
-
-      // Button calc
-      grid.addEventListener('click', (e)=>{
-        const btn = e.target.closest('.calc-btn');
-        if(!btn) return;
-        const method = btn.dataset.method;
-        const input = grid.querySelector(`.calc-input[data-method="${method}"]`);
-        const qty = Number(input?.value||0);
-        const rate = info.payouts[method]||0;
-        const out = grid.querySelector(`[data-result="${method}"]`);
-        if(qty<=0){ out.textContent='Enter a quantity.'; return; }
-        const total = qty*rate;
-        out.textContent = `${method==='invite'?'Estimated referral reward':'Estimated payout'}: ${fmt(total)} ${info.currency}.`;
-      });
-
-      // Example table
-      const summary = document.createElement('section');
-      summary.className = 'bg-white dark:bg-slate-800 rounded-2xl shadow-soft dark:shadow-softDark p-4';
-      summary.innerHTML = `
-        <h4 class="font-bold mb-2">Example daily totals (illustrative)</h4>
-        <table class="w-full text-sm">
-          <thead><tr class="text-left text-gray-500 dark:text-slate-400"><th class="py-1">Example</th><th class="py-1">Daily</th></tr></thead>
-          <tbody class="text-slate-700 dark:text-slate-200">
-            <tr><td class="py-1">10 YouTube videos</td><td class="py-1">${fmt(info.payouts.youtube*10)} ${info.currency}</td></tr>
-            <tr><td class="py-1">10 TikTok clips</td><td class="py-1">${fmt(info.payouts.tiktok*10)} ${info.currency}</td></tr>
-            <tr><td class="py-1">5 Surveys</td><td class="py-1">${fmt(info.payouts.survey*5)} ${info.currency}</td></tr>
-            <tr><td class="py-1">Invite 2 active friends</td><td class="py-1">${fmt(info.payouts.invite*2)} ${info.currency}</td></tr>
-          </tbody>
-        </table>`;
-      host.appendChild(summary);
-    } // end renderEarnings
-
-    function exampleWa(info){
-      return `Hi TrendQash, I'm in ${info.name} and want to join. Activation fee is ${fmt(info.activation)} ${info.currency}. Please guide me and confirm payout methods for my country.`;
-    }
-
-    /* ======================== PART 1 END — CONTINUE IN PART 2 (below) ======================== */
-  </script>
+      }
+    })();
+  <!-- ================= DATA + JS (SECOND SET/LEGACY SECTION) ================= -->
   <!-- Country Content -->
   <section id="countryContent" class="space-y-12">
 
@@ -752,7 +374,7 @@
       <!-- Input box -->
       <div class="flex mt-4">
         <input id="chatInput" type="text" class="flex-grow rounded-l-lg p-3 text-black" placeholder="Type your question..." />
-        <button onclick="sendChat()" class="bg-indigo-600 hover:bg-indigo-700 px-5 rounded-r-lg font-semibold">Send</button>
+        <button id="chatSendBtn2" class="bg-indigo-600 hover:bg-indigo-700 px-5 rounded-r-lg font-semibold">Send</button>
       </div>
 
       <!-- Quick Questions -->
@@ -777,9 +399,9 @@
     <footer class="text-center text-sm text-gray-500 py-6 mt-12">
       © 2025 TrendQash. All rights reserved.
     </footer>
-  </main>
+  </section>
 
-  <!-- ================= JS Section ================= -->
+  <!-- ================= JS Section (SECOND SET/LEGACY SECTION) ================= -->
   <script>
     let selectedCountry = null;
 
@@ -807,29 +429,42 @@
       renderCountry(selectedCountry);
     });
 
+    // Switch Country Button logic for legacy section
+    const switchBtn2 = document.getElementById('switchCountryBtn');
+    if (switchBtn2) {
+      switchBtn2.addEventListener('click', () => {
+        localStorage.removeItem('trend_country');
+        const modal = document.getElementById('countryModal');
+        if (modal) {
+          modal.style.display = 'flex';
+          modal.classList.remove('hidden');
+        }
+      });
+    }
+
     // Render country-specific content
     function renderCountry(country) {
       const slider = document.getElementById("sliderSection");
       let images = [];
 
       switch (country) {
-        case "Malawi": images = [
+        case "malawi": images = [
           "https://i.postimg.cc/tTcMMCBx/IMG-20250709-WA0014.jpg",
           "https://i.postimg.cc/NMFnDrkt/IMG-20250709-WA0015.jpg"
         ]; break;
-        case "Botswana": images = [
+        case "botswana": images = [
           "https://i.postimg.cc/8cr0QQYn/IMG-20250711-WA0004.jpg",
           "https://i.postimg.cc/t7Qm9vQR/IMG-20250711-WA0026.jpg"
         ]; break;
-        case "Kenya": images = [
+        case "kenya": images = [
           "https://i.postimg.cc/wjYSzMg5/IMG-20250718-WA0026.jpg",
           "https://i.postimg.cc/qqt9JCNw/IMG-20250819-WA0013.jpg"
         ]; break;
-        case "Ghana": images = [
+        case "ghana": images = [
           "https://i.postimg.cc/QdgvdDd2/IMG-20250801-WA0025.jpg",
           "https://i.postimg.cc/nL05q17T/IMG-20250816-WA0021.jpg"
         ]; break;
-        case "Uganda": images = [
+        case "uganda": images = [
           "https://i.postimg.cc/D0tR8ysT/IMG-20250808-WA0018.jpg",
           "https://i.postimg.cc/1z92gdgf/IMG-20250808-WA0019.jpg"
         ]; break;
@@ -870,9 +505,8 @@
       });
     });
 
-    // ================= Chatbot =================
-    const chatContainer = document.getElementById("chatContainer");
-
+    // ================= Chatbot (Legacy Section, Make Sure It Works) =================
+    const chatContainer2 = document.getElementById("chatContainer");
     function sendChat() {
       const input = document.getElementById("chatInput");
       const text = input.value.trim();
@@ -891,19 +525,20 @@
         addMessage("Bot", reply);
       }, 800);
     }
-
     function addMessage(sender, msg) {
       const bubble = document.createElement("div");
       bubble.className = sender === "You" ? "text-right" : "text-left";
       bubble.innerHTML = `<div class="inline-block px-4 py-2 rounded-xl ${sender === "You" ? "bg-indigo-600 text-white" : "bg-gray-700 text-gray-200"}">${msg}</div>`;
-      chatContainer.appendChild(bubble);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
+      chatContainer2.appendChild(bubble);
+      chatContainer2.scrollTop = chatContainer2.scrollHeight;
     }
-
     function quickAsk(question) {
       document.getElementById("chatInput").value = question;
       sendChat();
     }
+    // Attach send button (use id chatSendBtn2) and allow enter key
+    document.getElementById("chatSendBtn2").onclick = sendChat;
+    document.getElementById("chatInput").onkeypress = function(e) { if (e.key === "Enter") sendChat(); };
 
     // ================= WhatsApp =================
     function sendWhatsApp() {
@@ -912,7 +547,7 @@
         alert("Please type a message first.");
         return;
       }
-      const phone = "254700000000"; // Replace with your WhatsApp number
+      const phone = "254717028877"; // Support WhatsApp number
       const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
       window.open(url, "_blank");
     }
